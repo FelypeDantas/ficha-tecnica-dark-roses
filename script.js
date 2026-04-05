@@ -57,10 +57,10 @@ function gerar() {
 *🌫️ Título do Livro:* ${titulo.value}
 *🌹 Usuário no Wattpad :* ${user.value}
 *🌫️ Gênero Literário:* ${genero.value}
-*🌹 Contém conteúdo +18?  (Se sim, especifique: tortura, suicídio, abuso, drogas, etc.):* ${getCheckboxes()}
-*🌫️ Você possui gatilhos ou desconfortos ao ler conteúdo +18? (Se sim, quais?):* ${gatilhos.value}
-*🌹 Deseja participar de feedbacks? (Feedbacks são mútuos; não é possível apenas receber):* ${feedback.value}
-*🌫️ Possui capítulos especiais? (Capítulos curtos com menos de 300 palavras):* ${capEspeciais.value}
+*🌹 Contém conteúdo +18?  (Se sim, especifique: tortura, suicídio, abuso, drogas, etc.):* ${getCheckboxes()}.
+*🌫️ Você possui gatilhos ou desconfortos ao ler conteúdo +18? (Se sim, quais?):* ${gatilhos.value}.
+*🌹 Deseja participar de feedbacks? (Feedbacks são mútuos; não é possível apenas receber):* ${feedback.value}.
+*🌫️ Possui capítulos especiais? (Capítulos curtos com menos de 300 palavras):* ${capEspeciais.value}.
 *🌹 Quantidade de palavras (${palavrasFormatadas}):*
 *🌫️ Link da Obra:* ${link.value}
 ◃────────────────▹
