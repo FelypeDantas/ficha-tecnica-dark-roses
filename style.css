@@ -223,3 +223,94 @@ button:hover::after {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* ===== MOBILE FIRST ===== */
+@media (max-width: 768px) {
+
+  body {
+    padding: 12px;
+  }
+
+  .form-container {
+    padding: 15px;
+    border-radius: 12px;
+  }
+
+  h2 {
+    font-size: 20px;
+    text-align: center;
+  }
+
+  .descricao {
+    font-size: 13px;
+    text-align: center;
+  }
+
+  /* inputs maiores (toque confortável) */
+  input {
+    padding: 14px;
+    font-size: 15px;
+    border-radius: 10px;
+  }
+
+  /* labels mais legíveis */
+  label {
+    font-size: 14px;
+    margin-top: 10px;
+  }
+
+  small {
+    font-size: 12px;
+  }
+
+  /* botões empilhados */
+  .acoes {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .acoes button {
+    width: 100%;
+    padding: 14px;
+    font-size: 15px;
+    border-radius: 10px;
+  }
+
+  /* botões de tema mais organizados */
+  .temas {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+
+  .temas button {
+    flex: 1;
+    min-width: 90px;
+  }
+
+  /* checkbox mais fácil de clicar */
+  .checkbox-group label {
+    padding: 8px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.03);
+  }
+
+  .checkbox-group input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* barra mais visível */
+  #barra {
+    height: 16px;
+  }
+
+  /* resultado mais confortável */
+  #resultado {
+    font-size: 14px;
+    padding: 15px;
+  }
+}
