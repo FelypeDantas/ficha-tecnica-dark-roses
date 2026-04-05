@@ -28,8 +28,16 @@ function atualizarBarra() {
 }
 
 function getCheckboxes() {
-    const checks = document.querySelectorAll(".checkbox-group input:checked");
-    return Array.from(checks).map(c => c.value).join(", ") || "Não";
+  const checks = document.querySelectorAll(".checkbox-group input[type='checkbox']:checked");
+
+  let valores = Array.from(checks).map(c => c.value);
+
+  if (valores.includes("Outro") && outroTexto.value.trim() !== "") {
+    valores = valores.filter(v => v !== "Outro");
+    valores.push(outroTexto.value.trim());
+  }
+
+  return valores.length ? valores.join(", ") : "Não";
 }
 
 function gerar() {
