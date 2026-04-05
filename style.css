@@ -230,6 +230,26 @@ button:hover::after {
   animation: fadeIn 0.5s ease;
 }
 
+/* destaque no topo */
+.card h3 {
+  font-size: 22px;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+/* separador elegante */
+.card p {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  padding-bottom: 4px;
+}
+
+/* remove linha do último */
+.card p:last-child {
+  border-bottom: none;
+}
+
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
