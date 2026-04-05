@@ -77,6 +77,23 @@ function copiar() {
     alert("Copiado 🌹");
 }
 
+function gerarCard() {
+  const container = document.getElementById("cardContainer");
+
+  container.innerHTML = `
+    <div class="card">
+      <h3>🌹 ${nome.value || "Nome não informado"}</h3>
+
+      <p><strong>📖 Livro:</strong> ${titulo.value || "-"}</p>
+      <p><strong>🎭 Gênero:</strong> ${genero.value || "-"}</p>
+      <p><strong>👤 Wattpad:</strong> ${user.value || "-"}</p>
+
+      <p><strong>📅 Nascimento:</strong> ${data.value || "-"}</p>
+      <p><strong>💬 Feedbacks:</strong> ${feedback.value || "-"}</p>
+    </div>
+  `;
+}
+
 function setTema(tema) {
     document.body.className = tema;
 }
