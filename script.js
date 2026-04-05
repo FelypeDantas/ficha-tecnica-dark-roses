@@ -70,6 +70,7 @@ function gerar() {
 *S/a:*`;
 
     resultado.innerText = msg;
+    gerarCard();
 }
 
 function copiar() {
