@@ -1,5 +1,17 @@
 const inputs = document.querySelectorAll("input");
 const progresso = document.getElementById("progresso");
+const outroCheck = document.getElementById("outroCheck");
+const outroTexto = document.getElementById("outroTexto");
+
+outroCheck.addEventListener("change", () => {
+  if (outroCheck.checked) {
+    outroTexto.style.display = "block";
+    outroTexto.focus();
+  } else {
+    outroTexto.style.display = "none";
+    outroTexto.value = "";
+  }
+});
 
 inputs.forEach(input => {
     input.addEventListener("input", atualizarBarra);
