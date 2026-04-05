@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Dark Roses Form</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="dark">
+
+    <main class="form-container">
+
+        <header>
+            <h2>🌹 Dark Roses - Ficha 🌫️</h2>
+            <p class="descricao">
+                Preencha as informações abaixo para gerar sua ficha corretamente.
+                Leva menos de 2 minutos ✨
+            </p>
+        </header>
+
+        <!-- TEMAS -->
+        <section class="temas">
+            <button type="button" onclick="setTema('dark')">Dark</button>
+            <button type="button" onclick="setTema('blood')">Blood</button>
+            <button type="button" onclick="setTema('midnight')">Midnight</button>
+        </section>
+
+        <!-- PROGRESSO -->
+        <div id="barra">
+            <div id="progresso"></div>
+        </div>
+
+        <!-- FORM -->
+        <form id="formFicha">
+
+            <!-- IDENTIDADE -->
+            <fieldset>
+                <legend>🌹 Identidade</legend>
+
+                <label for="nome">Nome ou pseudônimo</label>
+                <input id="nome" required placeholder="Ex: Byanca Matos ou 'Autora Sombria'">
+                <small>Esse será o nome exibido na ficha</small>
+
+                <label for="data">Data de nascimento</label>
+                <input id="data" placeholder="Ex: 12/03/2002">
+                <small>Opcional</small>
+            </fieldset>
+
+            <!-- OBRA -->
+            <fieldset>
+                <legend>📖 Sobre a Obra</legend>
+
+                <label for="titulo">Título do livro</label>
+                <input id="titulo" placeholder="Ex: O Pacto Celestial">
+
+                <label for="user">Usuário no Wattpad</label>
+                <input id="user" placeholder="Ex: @byanca_writes">
+
+                <label for="genero">Gênero literário</label>
+                <input id="genero" placeholder="Ex: Fantasia, Romance, Terror">
+            </fieldset>
+
+            <!-- CONTEÚDO -->
+            <fieldset>
+                <legend>🔥 Conteúdo Sensível</legend>
+
+                <div class="checkbox-group">
+                    <strong>Conteúdo +18 presente?</strong>
+                    <small>Marque tudo que se aplica</small>
+
+                    <label><input type="checkbox" value="Tortura"> Tortura</label>
+                    <label><input type="checkbox" value="Abuso"> Abuso</label>
+                    <label><input type="checkbox" value="Suicídio"> Suicídio</label>
+                    <label><input type="checkbox" value="Drogas"> Drogas</label>
+                    <label><input type="checkbox" value="Violência"> Violência</label>
+                </div>
+
+                <label for="gatilhos">Possui gatilhos ou desconfortos?</label>
+                <input id="gatilhos" placeholder="Ex: Evito conteúdo sobre suicídio">
+            </fieldset>
+
+            <!-- PARTICIPAÇÃO -->
+            <fieldset>
+                <legend>💬 Participação</legend>
+
+                <label for="feedback">Deseja participar de feedbacks?</label>
+                <input id="feedback" placeholder="Ex: Sim / Não">
+
+                <label for="capEspeciais">Possui capítulos especiais?</label>
+                <input id="capEspeciais" placeholder="Ex: Sim (curtos abaixo de 300 palavras)">
+            </fieldset>
+
+            <!-- DETALHES -->
+            <fieldset>
+                <legend>🔢 Detalhes Técnicos</legend>
+
+                <label for="palavras">Quantidade de palavras</label>
+                <input id="palavras" placeholder="Ex: Maior: 2000 / Menor: 500 / Média: 1200">
+
+                <label for="link">Link da obra</label>
+                <input id="link" placeholder="https://www.wattpad.com/...">
+            </fieldset>
+
+            <!-- AÇÕES -->
+            <section class="acoes">
+                <button type="button" onclick="gerar()">Gerar Ficha</button>
+                <button type="button" onclick="copiar()">Copiar</button>
+            </section>
+
+        </form>
+
+        <!-- RESULTADO -->
+        <section id="resultado"></section>
+
+    </main>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>

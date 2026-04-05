@@ -1,0 +1,57 @@
+const inputs = document.querySelectorAll("input");
+const progresso = document.getElementById("progresso");
+
+inputs.forEach(input => {
+    input.addEventListener("input", atualizarBarra);
+});
+
+function atualizarBarra() {
+    let preenchidos = 0;
+    inputs.forEach(i => {
+        if (i.value.trim() !== "") preenchidos++;
+    });
+    let total = inputs.length;
+    let porcentagem = (preenchidos / total) * 100;
+    progresso.style.width = porcentagem + "%";
+}
+
+function getCheckboxes() {
+    const checks = document.querySelectorAll(".checkbox-group input:checked");
+    return Array.from(checks).map(c => c.value).join(", ") || "Não";
+}
+
+function gerar() {
+    if (!nome.value.trim()) {
+        alert("Nome obrigatório 🌹");
+        return;
+    }
+
+    const msg =
+        `*🌫️🌹${nome.value}🌹🌫️*
+*🌹 Data de Nascimento:* ${data.value}
+*🌫️ Título do Livro:* ${titulo.value}
+*🌹 Usuário no Wattpad :* ${user.value}
+*🌫️ Gênero Literário:* ${genero.value}
+*🌹 Conteúdo +18:* ${getCheckboxes()}
+*🌫️ Gatilhos:* ${gatilhos.value}
+*🌹 Feedbacks:* ${feedback.value}
+*🌫️ Capítulos especiais:* ${capEspeciais.value}
+*🌹 Quantidade de palavras:* ${palavras.value}
+*🌫️ Link da Obra:* ${link.value}
+◃────────────────▹
+*🌫️ NÃO PREENCHA 🌫️*
+*Bônus Q/L:* 
+*Q/Cc:* 
+*S/a:*`;
+
+    resultado.innerText = msg;
+}
+
+function copiar() {
+    navigator.clipboard.writeText(resultado.innerText);
+    alert("Copiado 🌹");
+}
+
+function setTema(tema) {
+    document.body.className = tema;
+}
