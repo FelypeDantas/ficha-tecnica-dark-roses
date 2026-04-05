@@ -46,6 +46,11 @@ function gerar() {
         return;
     }
 
+  const palavrasFormatadas = 
+  `Maior capítulo: ${maior.value || "-"} / ` +
+  `Menor capítulo: ${menor.value || "-"} / ` +
+  `Média padrão: ${media.value || "-"}`;
+
     const msg =
         `*🌫️🌹${nome.value}🌹🌫️*
 *🌹 Data de Nascimento:* ${data.value}
@@ -56,7 +61,7 @@ function gerar() {
 *🌫️ Você possui gatilhos ou desconfortos ao ler conteúdo +18? (Se sim, quais?):* ${gatilhos.value}
 *🌹 Deseja participar de feedbacks? (Feedbacks são mútuos; não é possível apenas receber):* ${feedback.value}
 *🌫️ Possui capítulos especiais? (Capítulos curtos com menos de 300 palavras):* ${capEspeciais.value}
-*🌹 Quantidade de palavras (Maior capítulo:  valor/ Menor capítulo: valor/ Média padrão: valor):* ${palavras.value}
+*🌹 Quantidade de palavras (${palavrasFormatadas}):*
 *🌫️ Link da Obra:* ${link.value}
 ◃────────────────▹
 *🌫️ NÃO PREENCHA 🌫️*
