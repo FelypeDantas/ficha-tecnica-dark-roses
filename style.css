@@ -81,6 +81,17 @@ legend {
   opacity: 0.8;
 }
 
+.grupo-palavras {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.grupo-palavras input {
+  flex: 1;
+  min-width: 120px;
+}
+
 /* dicas */
 small {
   display: block;
