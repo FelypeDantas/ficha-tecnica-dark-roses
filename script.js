@@ -78,6 +78,22 @@ function copiar() {
     alert("Copiado 🌹");
 }
 
+function baixarCard() {
+  const card = document.querySelector(".card");
+
+  if (!card) {
+    alert("Gere o cartão primeiro 🌹");
+    return;
+  }
+
+  html2canvas(card).then(canvas => {
+    const link = document.createElement("a");
+    link.download = "dark-roses-card.png";
+    link.href = canvas.toDataURL();
+    link.click();
+  });
+}
+
 function gerarCard() {
   const container = document.getElementById("cardContainer");
 
