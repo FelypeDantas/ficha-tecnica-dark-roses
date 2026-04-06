@@ -254,6 +254,11 @@ button:hover::after {
   border-bottom: none;
 }
 
+.card.exportando {
+  background: linear-gradient(145deg, #000, #2a0000);
+  box-shadow: 0 0 40px rgba(139,0,0,0.8);
+}
+
 .selo {
   position: absolute;
   top: 10px;
