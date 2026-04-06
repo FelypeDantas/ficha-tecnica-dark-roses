@@ -266,6 +266,13 @@ button:hover::after {
   box-shadow: 0 0 10px rgba(139,0,0,0.6);
 }
 
+.id {
+  margin-top: 10px;
+  font-size: 12px;
+  opacity: 0.6;
+  text-align: right;
+}
+
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
