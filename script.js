@@ -113,16 +113,43 @@ function gerarCard() {
 
   container.innerHTML = `
     <div class="card">
+      
       <div class="selo">🌹 Dark Roses</div>
-      <p class="id">ID: ${idMembro}</p>
-      <h3>🌹 ${nome.value || "Nome não informado"}</h3>
 
-      <p><strong>📖 Livro:</strong> ${titulo.value || "-"}</p>
-      <p><strong>🎭 Gênero:</strong> ${genero.value || "-"}</p>
-      <p><strong>👤 Wattpad:</strong> ${user.value || "-"}</p>
+      <h3>${nome.value}</h3>
+      <div class="sub">MEMBRO OFICIAL</div>
 
-      <p><strong>📅 Nascimento:</strong> ${data.value || "-"}</p>
-      <p><strong>💬 Feedbacks:</strong> ${feedback.value || "-"}</p>
+      <div class="info">
+        <span>📖 Livro</span>
+        <strong>${titulo.value || "-"}</strong>
+      </div>
+
+      <div class="info">
+        <span>🎭 Gênero</span>
+        <strong>${genero.value || "-"}</strong>
+      </div>
+
+      <div class="info">
+        <span>👤 Wattpad</span>
+        <strong>${user.value || "-"}</strong>
+      </div>
+
+      <div class="info">
+        <span>📅 Nascimento</span>
+        <strong>${data.value || "-"}</strong>
+      </div>
+
+      <div class="info">
+        <span>💬 Feedbacks</span>
+        <strong>${feedback.value || "-"}</strong>
+      </div>
+
+      <div class="id">ID: ${idMembro}</div>
+
+      <div class="footer">
+        Dark Roses Society • Escritores unidos pela arte
+      </div>
+
     </div>
   `;
 }
