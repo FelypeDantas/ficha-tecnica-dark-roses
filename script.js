@@ -17,6 +17,10 @@ inputs.forEach(input => {
     input.addEventListener("input", atualizarBarra);
 });
 
+function gerarID() {
+  return "DR-" + Math.floor(100000 + Math.random() * 900000);
+}
+
 function atualizarBarra() {
     let preenchidos = 0;
     inputs.forEach(i => {
@@ -96,10 +100,12 @@ function baixarCard() {
 
 function gerarCard() {
   const container = document.getElementById("cardContainer");
+  const idMembro = gerarID();
 
   container.innerHTML = `
     <div class="card">
       <div class="selo">🌹 Dark Roses</div>
+      <p class="id">ID: ${idMembro}</p>
       <h3>🌹 ${nome.value || "Nome não informado"}</h3>
 
       <p><strong>📖 Livro:</strong> ${titulo.value || "-"}</p>
