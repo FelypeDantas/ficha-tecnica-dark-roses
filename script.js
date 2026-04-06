@@ -99,6 +99,7 @@ function gerarCard() {
 
   container.innerHTML = `
     <div class="card">
+      <div class="selo">🌹 Dark Roses</div>
       <h3>🌹 ${nome.value || "Nome não informado"}</h3>
 
       <p><strong>📖 Livro:</strong> ${titulo.value || "-"}</p>
