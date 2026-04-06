@@ -90,11 +90,20 @@ function baixarCard() {
     return;
   }
 
-  html2canvas(card).then(canvas => {
+  // adiciona classe temporária
+  card.classList.add("exportando");
+
+  html2canvas(card, {
+    scale: 2,
+    backgroundColor: null
+  }).then(canvas => {
     const link = document.createElement("a");
     link.download = "dark-roses-card.png";
     link.href = canvas.toDataURL();
     link.click();
+
+    // remove depois
+    card.classList.remove("exportando");
   });
 }
 
