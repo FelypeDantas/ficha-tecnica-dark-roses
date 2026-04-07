@@ -2,7 +2,6 @@
 
 ![Status](https://img.shields.io/badge/status-em%20desenvolvimento-8b0000)
 ![Version](https://img.shields.io/badge/version-1.0-ff0000)
-![License](https://img.shields.io/badge/license-MIT-black)
 ![Made With](https://img.shields.io/badge/made%20with-JavaScript-blue)
 ![UI](https://img.shields.io/badge/UI-Dark%20Aesthetic-111)
 
