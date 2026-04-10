@@ -45,7 +45,10 @@
                 <small>Esse será o nome exibido na ficha</small>
 
                 <label for="data">Data de nascimento</label>
-                <input id="data" placeholder="Ex: 12/03/2002">
+                <input  id="data" 
+                        placeholder="Ex: 12/03/2002"
+                        pattern="^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$"
+                        title="Use o formato dd/mm/aaaa (Ex: 12/03/2002)">
             </fieldset>
 
             <!-- OBRA -->
