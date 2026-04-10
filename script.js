@@ -50,6 +50,21 @@ function gerar() {
         return;
     }
 
+  function validarData(dataStr) {
+  const regex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
+
+  if (!regex.test(dataStr)) return false;
+
+  const [dia, mes, ano] = dataStr.split("/").map(Number);
+  const data = new Date(ano, mes - 1, dia);
+
+  return (
+    data.getFullYear() === ano &&
+    data.getMonth() === mes - 1 &&
+    data.getDate() === dia
+  );
+}
+
   const palavrasFormatadas = 
   `Maior capítulo: ${maior.value || "-"} / ` +
   `Menor capítulo: ${menor.value || "-"} / ` +
