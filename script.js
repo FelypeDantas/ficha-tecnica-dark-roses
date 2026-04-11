@@ -44,12 +44,6 @@ function getCheckboxes() {
   return valores.length ? valores.join(", ") : "Não";
 }
 
-function gerar() {
-    if (!nome.value.trim()) {
-        alert("Nome obrigatório 🌹");
-        return;
-    }
-
   function validarData(dataStr) {
   const regex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
 
@@ -64,6 +58,17 @@ function gerar() {
     data.getDate() === dia
   );
 }
+
+function gerar() {
+    if (!nome.value.trim()) {
+        alert("Nome obrigatório 🌹");
+        return;
+    }
+
+    if (data.value && !validarData(data.value)) {
+        alert("Data inválida 🌫️ Use o formato dd/mm/aaaa corretamente.");
+        return;
+    }
 
   const palavrasFormatadas = 
   `Maior capítulo: ${maior.value || "-"} / ` +
