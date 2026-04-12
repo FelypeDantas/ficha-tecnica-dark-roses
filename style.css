@@ -1,4 +1,5 @@
 :root {
+  /* cores base */
   --bg: #000;
   --card: rgba(26, 26, 26, 0.65);
   --primary: #8b0000;
@@ -6,9 +7,15 @@
   --border: rgba(255, 255, 255, 0.06);
   --glow: rgba(139, 0, 0, 0.6);
   --soft: rgba(255,255,255,0.04);
+
+  /* espaçamentos */
+  --radius: 12px;
+  --radius-lg: 18px;
+  --space: 10px;
+  --transition: 0.3s;
 }
 
-/* temas */
+/* ===== TEMAS ===== */
 body.dark {
   --bg: #000;
   --primary: #8b0000;
@@ -27,40 +34,27 @@ body.midnight {
   --glow: rgba(59, 130, 246, 0.6);
 }
 
-/* fundo cinematográfico */
+/* ===== BASE ===== */
 body {
   background:
     radial-gradient(circle at 20% 10%, var(--glow), transparent 40%),
     radial-gradient(circle at 80% 90%, var(--glow), transparent 40%),
     var(--bg);
-    
+
   color: var(--text);
   font-family: 'Segoe UI', sans-serif;
   padding: 20px;
-  transition: 0.5s;
+  transition: var(--transition);
 }
 
-/* título com destaque */
+/* ===== TIPOGRAFIA ===== */
 h2 {
   font-weight: 600;
   letter-spacing: 1px;
-  margin-bottom: 10px;
+  margin-bottom: var(--space);
   text-shadow: 0 0 10px var(--glow);
 }
 
-/* container invisível elegante */
-.form-container {
-  max-width: 700px;
-  margin: auto;
-  padding: 20px;
-  border-radius: 16px;
-  background: linear-gradient(145deg, var(--card), rgba(255,255,255,0.02));
-  backdrop-filter: blur(12px);
-  border: 1px solid var(--border);
-  box-shadow: 0 0 40px rgba(0,0,0,0.6);
-}
-
-/* labels */
 label {
   display: block;
   margin-bottom: 5px;
@@ -68,9 +62,31 @@ label {
   opacity: 0.9;
 }
 
+small {
+  display: block;
+  margin: -8px 0 var(--space);
+  font-size: 12px;
+  opacity: 0.6;
+}
+
+/* ===== CONTAINER ===== */
+.form-container {
+  max-width: 700px;
+  margin: auto;
+  padding: 20px;
+  border-radius: var(--radius-lg);
+
+  background: linear-gradient(145deg, var(--card), rgba(255,255,255,0.02));
+  backdrop-filter: blur(12px);
+
+  border: 1px solid var(--border);
+  box-shadow: 0 0 40px rgba(0,0,0,0.6);
+}
+
+/* ===== FIELDSET ===== */
 fieldset {
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius);
   padding: 15px;
   margin-bottom: 20px;
 }
@@ -81,9 +97,38 @@ legend {
   opacity: 0.8;
 }
 
+/* ===== INPUTS ===== */
+input {
+  width: 100%;
+  margin-bottom: 15px;
+  padding: 12px;
+  border-radius: var(--radius);
+
+  border: 1px solid var(--border);
+  background: var(--soft);
+  color: var(--text);
+
+  outline: none;
+  transition: var(--transition);
+}
+
+input:hover {
+  transform: scale(1.01);
+}
+
+input:focus {
+  border-color: var(--primary);
+  background: rgba(255,255,255,0.06);
+
+  box-shadow: 
+    0 0 0 1px var(--primary),
+    0 0 15px var(--glow);
+}
+
+/* ===== GRUPOS ===== */
 .grupo-palavras {
   display: flex;
-  gap: 10px;
+  gap: var(--space);
   flex-wrap: wrap;
 }
 
@@ -92,70 +137,35 @@ legend {
   min-width: 120px;
 }
 
-/* dicas */
-small {
-  display: block;
-  margin-top: -8px;
-  margin-bottom: 10px;
-  font-size: 12px;
-  opacity: 0.6;
-}
-
-/* inputs */
-input {
-  width: 100%;
-  margin-bottom: 15px;
-  padding: 12px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-  background: var(--soft);
-  color: var(--text);
-  outline: none;
-  transition: 0.3s;
-}
-
-/* efeito focus premium */
-input:focus {
-  border-color: var(--primary);
-  box-shadow: 
-    0 0 0 1px var(--primary),
-    0 0 15px var(--glow);
-  background: rgba(255,255,255,0.06);
-}
-
-/* animação leve ao passar */
-input:hover {
-  transform: scale(1.01);
-}
-
-/* botões */
+/* ===== BOTÕES ===== */
 button {
   padding: 10px 16px;
   margin: 5px 5px 10px 0;
+
   background: linear-gradient(135deg, var(--primary), #000);
-  color: white;
+  color: #fff;
+
   border: 1px solid var(--border);
-  cursor: pointer;
   border-radius: 8px;
-  transition: 0.3s;
+
+  cursor: pointer;
   position: relative;
   overflow: hidden;
+
+  transition: var(--transition);
 }
 
-/* hover com profundidade */
 button:hover {
   transform: translateY(-2px) scale(1.02);
   box-shadow: 0 0 20px var(--glow);
 }
 
-/* efeito luz passando */
 button::after {
   content: "";
   position: absolute;
+  inset: 0;
   width: 150%;
-  height: 100%;
   background: linear-gradient(120deg, transparent, rgba(255,255,255,0.2), transparent);
-  top: 0;
   left: -150%;
   transition: 0.6s;
 }
@@ -164,34 +174,39 @@ button:hover::after {
   left: 100%;
 }
 
-/* barra de progresso */
+/* ===== PROGRESSO ===== */
 #barra {
   width: 100%;
   height: 14px;
+  margin-bottom: 20px;
+
   background: rgba(255,255,255,0.04);
   border-radius: 20px;
-  margin-bottom: 20px;
   overflow: hidden;
 }
 
 #progresso {
   height: 100%;
   width: 0%;
+
   background: linear-gradient(90deg, var(--primary), transparent);
   border-radius: 20px;
-  transition: 0.4s;
+
   box-shadow: 0 0 15px var(--glow);
+  transition: 0.4s;
 }
 
-/* checkbox */
+/* ===== CHECKBOX ===== */
 .checkbox-group {
   background: var(--card);
   padding: 15px;
-  border-radius: 14px;
+  border-radius: var(--radius-lg);
+
   margin-bottom: 20px;
   backdrop-filter: blur(12px);
+
   border: 1px solid var(--border);
-  transition: 0.3s;
+  transition: var(--transition);
 }
 
 .checkbox-group:hover {
@@ -212,29 +227,32 @@ button:hover::after {
   cursor: pointer;
 }
 
-/* resultado */
+/* ===== RESULTADO ===== */
 #resultado {
   white-space: pre-wrap;
   background: var(--card);
+
   padding: 20px;
   margin-top: 25px;
-  border-radius: 14px;
+
+  border-radius: var(--radius-lg);
   backdrop-filter: blur(14px);
+
   border: 1px solid var(--border);
   line-height: 1.7;
-  box-shadow: 0 0 20px rgba(0,0,0,0.5);
-}
 
-/* entrada suave */
-#resultado {
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
   animation: fadeIn 0.5s ease;
 }
 
+/* ===== CARD ===== */
 .card {
   position: relative;
   margin-top: 30px;
   padding: 28px;
-  border-radius: 18px;
+
+  border-radius: var(--radius-lg);
+  overflow: hidden;
 
   background:
     linear-gradient(145deg, rgba(0,0,0,0.9), rgba(20,0,0,0.8)),
@@ -247,23 +265,23 @@ button:hover::after {
     inset 0 0 30px rgba(255,255,255,0.02);
 
   backdrop-filter: blur(12px);
-  overflow: hidden;
 }
 
-/* borda iluminada sutil */
 .card::after {
   content: "";
   position: absolute;
   inset: 0;
-  border-radius: 18px;
+  border-radius: var(--radius-lg);
   padding: 1px;
+
   background: linear-gradient(120deg, transparent, rgba(139,0,0,0.5), transparent);
+
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
 }
 
-/* título principal */
+/* ===== CARD ELEMENTOS ===== */
 .card h3 {
   font-size: 24px;
   text-align: center;
@@ -272,7 +290,6 @@ button:hover::after {
   text-shadow: 0 0 15px rgba(139,0,0,0.6);
 }
 
-/* subtítulo (tipo cargo) */
 .card .sub {
   text-align: center;
   font-size: 12px;
@@ -281,7 +298,6 @@ button:hover::after {
   margin-bottom: 20px;
 }
 
-/* linhas de informação */
 .card .info {
   display: flex;
   justify-content: space-between;
@@ -298,28 +314,6 @@ button:hover::after {
   text-align: right;
 }
 
-/* selo */
-.selo {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  background: linear-gradient(135deg, #8b0000, #000);
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 10px;
-  letter-spacing: 1px;
-  box-shadow: 0 0 10px rgba(139,0,0,0.7);
-}
-
-/* rodapé elegante */
-.card .footer {
-  margin-top: 20px;
-  font-size: 11px;
-  text-align: center;
-  opacity: 0.5;
-}
-
-/* ID */
 .card .id {
   text-align: right;
   margin-top: 10px;
@@ -327,12 +321,36 @@ button:hover::after {
   opacity: 0.6;
 }
 
+.card .footer {
+  margin-top: 20px;
+  font-size: 11px;
+  text-align: center;
+  opacity: 0.5;
+}
+
+/* selo */
+.selo {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+
+  background: linear-gradient(135deg, var(--primary), #000);
+  padding: 6px 12px;
+
+  border-radius: 20px;
+  font-size: 10px;
+  letter-spacing: 1px;
+
+  box-shadow: 0 0 10px var(--glow);
+}
+
+/* ===== ANIMAÇÃO ===== */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* ===== MOBILE FIRST ===== */
+/* ===== MOBILE ===== */
 @media (max-width: 768px) {
 
   body {
@@ -341,7 +359,6 @@ button:hover::after {
 
   .form-container {
     padding: 15px;
-    border-radius: 12px;
   }
 
   h2 {
@@ -354,24 +371,11 @@ button:hover::after {
     text-align: center;
   }
 
-  /* inputs maiores (toque confortável) */
   input {
     padding: 14px;
     font-size: 15px;
-    border-radius: 10px;
   }
 
-  /* labels mais legíveis */
-  label {
-    font-size: 14px;
-    margin-top: 10px;
-  }
-
-  small {
-    font-size: 12px;
-  }
-
-  /* botões empilhados */
   .acoes {
     display: flex;
     flex-direction: column;
@@ -381,17 +385,13 @@ button:hover::after {
   .acoes button {
     width: 100%;
     padding: 14px;
-    font-size: 15px;
-    border-radius: 10px;
   }
 
-  /* botões de tema mais organizados */
   .temas {
     display: flex;
     justify-content: center;
     gap: 8px;
     flex-wrap: wrap;
-    margin-bottom: 10px;
   }
 
   .temas button {
@@ -399,7 +399,6 @@ button:hover::after {
     min-width: 90px;
   }
 
-  /* checkbox mais fácil de clicar */
   .checkbox-group label {
     padding: 8px;
     border-radius: 8px;
@@ -411,12 +410,10 @@ button:hover::after {
     height: 18px;
   }
 
-  /* barra mais visível */
   #barra {
     height: 16px;
   }
 
-  /* resultado mais confortável */
   #resultado {
     font-size: 14px;
     padding: 15px;
