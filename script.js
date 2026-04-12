@@ -1,41 +1,50 @@
+// ===== ELEMENTOS =====
 const inputs = document.querySelectorAll("input");
 const progresso = document.getElementById("progresso");
 const outroCheck = document.getElementById("outroCheck");
 const outroTexto = document.getElementById("outroTexto");
+const resultado = document.getElementById("resultado");
 
-outroCheck.addEventListener("change", () => {
-  if (outroCheck.checked) {
-    outroTexto.style.display = "block";
-    outroTexto.focus();
-  } else {
-    outroTexto.style.display = "none";
-    outroTexto.value = "";
-  }
-});
+// ===== EVENTOS =====
+outroCheck.addEventListener("change", toggleOutro);
 
 inputs.forEach(input => {
     input.addEventListener("input", atualizarBarra);
 });
 
+// ===== FUNÇÕES =====
+function toggleOutro() {
+  const ativo = outroCheck.checked;
+
+  outroTexto.style.display = ativo ? "block" : "none";
+
+  if (ativo) {
+    outroTexto.focus();
+  } else {
+    outroTexto.value = "";
+  }
+}
+
 function gerarID() {
-  return "DR-" + Math.floor(100000 + Math.random() * 900000);
+  return `DR-${Math.floor(100000 + Math.random() * 900000)}`;
 }
 
 function atualizarBarra() {
     let preenchidos = 0;
+
     inputs.forEach(i => {
-        if (i.value.trim() !== "") preenchidos++;
+        if (i.value.trim()) preenchidos++;
     });
-    let total = inputs.length;
-    let porcentagem = (preenchidos / total) * 100;
-    progresso.style.width = porcentagem + "%";
+
+    const porcentagem = (preenchidos / inputs.length) * 100;
+    progresso.style.width = `${porcentagem}%`;
 }
 
 function calcularMedia(maior, menor) {
-  const max = parseInt(maior);
-  const min = parseInt(menor);
+  const max = parseInt(maior, 10);
+  const min = parseInt(menor, 10);
 
-  if (isNaN(max) || isNaN(min)) return "-";
+  if (!Number.isInteger(max) || !Number.isInteger(min)) return "-";
 
   return Math.round((max + min) / 2);
 }
@@ -45,7 +54,7 @@ function getCheckboxes() {
 
   let valores = Array.from(checks).map(c => c.value);
 
-  if (valores.includes("Outro") && outroTexto.value.trim() !== "") {
+  if (valores.includes("Outro") && outroTexto.value.trim()) {
     valores = valores.filter(v => v !== "Outro");
     valores.push(outroTexto.value.trim());
   }
@@ -53,7 +62,7 @@ function getCheckboxes() {
   return valores.length ? valores.join(", ") : "Não";
 }
 
-  function validarData(dataStr) {
+function validarData(dataStr) {
   const regex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
 
   if (!regex.test(dataStr)) return false;
@@ -68,6 +77,7 @@ function getCheckboxes() {
   );
 }
 
+// ===== AÇÃO PRINCIPAL =====
 function gerar() {
     if (!nome.value.trim()) {
         alert("Nome obrigatório 🌹");
@@ -79,13 +89,14 @@ function gerar() {
         return;
     }
 
-const mediaCalculada = calcularMedia(maior.value, menor.value);
+    const mediaCalculada = calcularMedia(maior.value, menor.value);
 
-const palavrasFormatadas = 
-`Maior capítulo: ${maior.value || "-"} / ` +
-`Menor capítulo: ${menor.value || "-"} / ` +
-`Média padrão: ${mediaCalculada}`;
+    const palavrasFormatadas = 
+    `Maior capítulo: ${maior.value || "-"} / ` +
+    `Menor capítulo: ${menor.value || "-"} / ` +
+    `Média padrão: ${mediaCalculada}`;
 
+    // ⚠️ TEXTO PRESERVADO EXATAMENTE COMO VOCÊ DEFINIU
     const msg =
         `*🌫️🌹${nome.value}🌹🌫️*
 *🌹 Data de Nascimento:* ${data.value}
@@ -109,6 +120,11 @@ const palavrasFormatadas =
 }
 
 function copiar() {
+    if (!resultado.innerText) {
+        alert("Nada para copiar 🌫️");
+        return;
+    }
+
     navigator.clipboard.writeText(resultado.innerText);
     alert("Copiado 🌹");
 }
@@ -121,7 +137,6 @@ function baixarCard() {
     return;
   }
 
-  // adiciona classe temporária
   card.classList.add("exportando");
 
   html2canvas(card, {
@@ -132,8 +147,7 @@ function baixarCard() {
     link.download = "dark-roses-card.png";
     link.href = canvas.toDataURL();
     link.click();
-
-    // remove depois
+  }).finally(() => {
     card.classList.remove("exportando");
   });
 }
