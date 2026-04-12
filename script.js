@@ -89,6 +89,16 @@ function gerar() {
         return;
     }
 
+        if (maior.value && menor.value) {
+        const max = parseInt(maior.value, 10);
+        const min = parseInt(menor.value, 10);
+
+        if (min > max) {
+            alert("O menor capítulo não pode ser maior que o maior 🌫️");
+            return;
+        }
+    }
+
     const mediaCalculada = calcularMedia(maior.value, menor.value);
 
     const palavrasFormatadas = 
