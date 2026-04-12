@@ -31,6 +31,15 @@ function atualizarBarra() {
     progresso.style.width = porcentagem + "%";
 }
 
+function calcularMedia(maior, menor) {
+  const max = parseInt(maior);
+  const min = parseInt(menor);
+
+  if (isNaN(max) || isNaN(min)) return "-";
+
+  return Math.round((max + min) / 2);
+}
+
 function getCheckboxes() {
   const checks = document.querySelectorAll(".checkbox-group input[type='checkbox']:checked");
 
@@ -70,10 +79,12 @@ function gerar() {
         return;
     }
 
-  const palavrasFormatadas = 
-  `Maior capítulo: ${maior.value || "-"} / ` +
-  `Menor capítulo: ${menor.value || "-"} / ` +
-  `Média padrão: ${media.value || "-"}`;
+const mediaCalculada = calcularMedia(maior.value, menor.value);
+
+const palavrasFormatadas = 
+`Maior capítulo: ${maior.value || "-"} / ` +
+`Menor capítulo: ${menor.value || "-"} / ` +
+`Média padrão: ${mediaCalculada}`;
 
     const msg =
         `*🌫️🌹${nome.value}🌹🌫️*
