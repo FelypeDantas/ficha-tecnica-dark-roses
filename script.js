@@ -1,45 +1,70 @@
 // ===== ELEMENTOS =====
-const inputs = document.querySelectorAll("input");
-const progresso = document.getElementById("progresso");
-const outroCheck = document.getElementById("outroCheck");
-const outroTexto = document.getElementById("outroTexto");
-const resultado = document.getElementById("resultado");
+const el = {
+  nome: document.getElementById("nome"),
+  data: document.getElementById("data"),
+  titulo: document.getElementById("titulo"),
+  user: document.getElementById("user"),
+  genero: document.getElementById("genero"),
+  gatilhos: document.getElementById("gatilhos"),
+  feedback: document.getElementById("feedback"),
+  capEspeciais: document.getElementById("capEspeciais"),
+  link: document.getElementById("link"),
+  maior: document.getElementById("maior"),
+  menor: document.getElementById("menor"),
+
+  progresso: document.getElementById("progresso"),
+  outroCheck: document.getElementById("outroCheck"),
+  outroTexto: document.getElementById("outroTexto"),
+  resultado: document.getElementById("resultado"),
+  cardContainer: document.getElementById("cardContainer"),
+};
+
+// apenas inputs relevantes para progresso
+const inputs = document.querySelectorAll("input[type='text'], input[type='date']");
 
 // ===== EVENTOS =====
-outroCheck.addEventListener("change", toggleOutro);
+el.outroCheck.addEventListener("change", toggleOutro);
 
 inputs.forEach(input => {
-    input.addEventListener("input", atualizarBarra);
+  input.addEventListener("input", atualizarBarra);
 });
 
 // ===== FUNÇÕES =====
-function toggleOutro() {
-  const ativo = outroCheck.checked;
 
-  outroTexto.style.display = ativo ? "block" : "none";
+// 🌹 UI
+function toggleOutro() {
+  const ativo = el.outroCheck.checked;
+
+  el.outroTexto.style.display = ativo ? "block" : "none";
 
   if (ativo) {
-    outroTexto.focus();
+    el.outroTexto.focus();
   } else {
-    outroTexto.value = "";
+    el.outroTexto.value = "";
   }
 }
 
+// 🆔 ID mais seguro
 function gerarID() {
+  if (window.crypto?.randomUUID) {
+    return `DR-${crypto.randomUUID().slice(0, 8)}`;
+  }
   return `DR-${Math.floor(100000 + Math.random() * 900000)}`;
 }
 
+// 📊 Progresso
 function atualizarBarra() {
-    let preenchidos = 0;
+  let preenchidos = 0;
 
-    inputs.forEach(i => {
-        if (i.value.trim()) preenchidos++;
-    });
+  inputs.forEach(i => {
+    if (i.value.trim()) preenchidos++;
+  });
 
-    const porcentagem = (preenchidos / inputs.length) * 100;
-    progresso.style.width = `${porcentagem}%`;
+  const porcentagem = (preenchidos / inputs.length) * 100;
+  el.progresso.style.width = `${porcentagem}%`;
 }
 
+// 🧼 Limpeza de texto
 function limparEspacosFinais(texto) {
   return texto
     .split("\n")
@@ -48,6 +73,7 @@ function limparEspacosFinais(texto) {
     .trim();
 }
 
+// 📐 Regras de negócio
 function calcularMedia(maior, menor) {
   const max = parseInt(maior, 10);
   const min = parseInt(menor, 10);
@@ -62,9 +88,9 @@ function getCheckboxes() {
 
   let valores = Array.from(checks).map(c => c.value);
 
-  if (valores.includes("Outro") && outroTexto.value.trim()) {
+  if (valores.includes("Outro") && el.outroTexto.value.trim()) {
     valores = valores.filter(v => v !== "Outro");
-    valores.push(outroTexto.value.trim());
+    valores.push(el.outroTexto.value.trim());
   }
 
   return valores.length ? valores.join(", ") : "Não";
@@ -85,73 +111,90 @@ function validarData(dataStr) {
   );
 }
 
-// ===== AÇÃO PRINCIPAL =====
-function gerar() {
-    if (!nome.value.trim()) {
-        alert("Nome obrigatório 🌹");
-        return;
+// ✅ Validação isolada
+function validarFormulario() {
+  if (!el.nome.value.trim()) {
+    alert("Nome obrigatório 🌹");
+    return false;
+  }
+
+  if (el.data.value && !validarData(el.data.value)) {
+    alert("Data inválida 🌫️ Use o formato dd/mm/aaaa corretamente.");
+    return false;
+  }
+
+  if (el.maior.value && el.menor.value) {
+    const max = parseInt(el.maior.value, 10);
+    const min = parseInt(el.menor.value, 10);
+
+    if (min > max) {
+      alert("O menor capítulo não pode ser maior que o maior 🌫️");
+      return false;
     }
+  }
 
-    if (data.value && !validarData(data.value)) {
-        alert("Data inválida 🌫️ Use o formato dd/mm/aaaa corretamente.");
-        return;
-    }
+  return true;
+}
 
-        if (maior.value && menor.value) {
-        const max = parseInt(maior.value, 10);
-        const min = parseInt(menor.value, 10);
+// 🧾 Montagem da mensagem (STRING PRESERVADA)
+function montarMensagem() {
+  const mediaCalculada = calcularMedia(el.maior.value, el.menor.value);
 
-        if (min > max) {
-            alert("O menor capítulo não pode ser maior que o maior 🌫️");
-            return;
-        }
-    }
-
-    const mediaCalculada = calcularMedia(maior.value, menor.value);
-
-    const palavrasFormatadas = 
-    `Maior capítulo: ${maior.value || "-"} / ` +
-    `Menor capítulo: ${menor.value || "-"} / ` +
+  const palavrasFormatadas =
+    `Maior capítulo: ${el.maior.value || "-"} / ` +
+    `Menor capítulo: ${el.menor.value || "-"} / ` +
     `Média padrão: ${mediaCalculada}`;
 
-    // ⚠️ TEXTO PRESERVADO EXATAMENTE COMO VOCÊ DEFINIU
-    const msg =
-        `*🌫️🌹${nome.value}🌹🌫️*
-*🌹 Data de Nascimento:* ${data.value}
-*🌫️ Título do Livro:* ${titulo.value}
-*🌹 Usuário no Wattpad :* ${user.value}
-*🌫️ Gênero Literário:* ${genero.value}
+  return `*🌫️🌹${el.nome.value}🌹🌫️*
+*🌹 Data de Nascimento:* ${el.data.value}
+*🌫️ Título do Livro:* ${el.titulo.value}
+*🌹 Usuário no Wattpad :* ${el.user.value}
+*🌫️ Gênero Literário:* ${el.genero.value}
 *🌹 Contém conteúdo +18?  (Se sim, especifique: tortura, suicídio, abuso, drogas, etc.):* ${getCheckboxes()}.
-*🌫️ Você possui gatilhos ou desconfortos ao ler conteúdo +18? (Se sim, quais?):* ${gatilhos.value}.
-*🌹 Deseja participar de feedbacks? (Feedbacks são mútuos; não é possível apenas receber):* ${feedback.value}.
-*🌫️ Possui capítulos especiais? (Capítulos curtos com menos de 300 palavras):* ${capEspeciais.value}.
+*🌫️ Você possui gatilhos ou desconfortos ao ler conteúdo +18? (Se sim, quais?):* ${el.gatilhos.value}.
+*🌹 Deseja participar de feedbacks? (Feedbacks são mútuos; não é possível apenas receber):* ${el.feedback.value}.
+*🌫️ Possui capítulos especiais? (Capítulos curtos com menos de 300 palavras):* ${el.capEspeciais.value}.
 *🌹 Quantidade de palavras (${palavrasFormatadas}):*
-*🌫️ Link da Obra:* ${link.value}
+*🌫️ Link da Obra:* ${el.link.value}
 ◃────────────────▹
 *🌫️ NÃO PREENCHA 🌫️*
 *Bônus Q/L:* 
 *Q/Cc:* 
 *S/a:*`;
-
-    resultado.innerText = limparEspacosFinais(msg);
-    gerarCard();
 }
 
+// 🎯 AÇÃO PRINCIPAL
+function gerar() {
+  if (!validarFormulario()) return;
+
+  const msg = montarMensagem();
+  el.resultado.innerText = limparEspacosFinais(msg);
+
+  gerarCard();
+}
+
+// 📋 Copiar
 function copiar() {
-    if (!resultado.innerText) {
-        alert("Nada para copiar 🌫️");
-        return;
-    }
+  if (!el.resultado.innerText) {
+    alert("Nada para copiar 🌫️");
+    return;
+  }
 
-    navigator.clipboard.writeText(resultado.innerText);
-    alert("Copiado 🌹");
+  navigator.clipboard.writeText(el.resultado.innerText);
+  alert("Copiado 🌹");
 }
 
+// 🖼️ Exportar card
 function baixarCard() {
   const card = document.querySelector(".card");
 
   if (!card) {
     alert("Gere o cartão primeiro 🌹");
+    return;
+  }
+
+  if (typeof html2canvas === "undefined") {
+    alert("Erro ao gerar imagem 🌫️");
     return;
   }
 
@@ -170,41 +213,41 @@ function baixarCard() {
   });
 }
 
+// 🃏 Card
 function gerarCard() {
-  const container = document.getElementById("cardContainer");
   const idMembro = gerarID();
 
-  container.innerHTML = `
+  el.cardContainer.innerHTML = `
     <div class="card">
       
       <div class="selo">🌹 Dark Roses</div>
 
-      <h3>${nome.value}</h3>
+      <h3>${el.nome.value}</h3>
       <div class="sub">MEMBRO OFICIAL</div>
 
       <div class="info">
         <span>📖 Livro</span>
-        <strong>${titulo.value || "-"}</strong>
+        <strong>${el.titulo.value || "-"}</strong>
       </div>
 
       <div class="info">
         <span>🎭 Gênero</span>
-        <strong>${genero.value || "-"}</strong>
+        <strong>${el.genero.value || "-"}</strong>
       </div>
 
       <div class="info">
         <span>👤 Wattpad</span>
-        <strong>${user.value || "-"}</strong>
+        <strong>${el.user.value || "-"}</strong>
       </div>
 
       <div class="info">
         <span>📅 Nascimento</span>
-        <strong>${data.value || "-"}</strong>
+        <strong>${el.data.value || "-"}</strong>
       </div>
 
       <div class="info">
         <span>💬 Feedbacks</span>
-        <strong>${feedback.value || "-"}</strong>
+        <strong>${el.feedback.value || "-"}</strong>
       </div>
 
       <div class="id">ID: ${idMembro}</div>
@@ -217,6 +260,7 @@ function gerarCard() {
   `;
 }
 
+// 🎨 Tema
 function setTema(tema) {
-    document.body.className = tema;
+  document.body.className = tema;
 }
