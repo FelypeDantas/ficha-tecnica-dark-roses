@@ -40,6 +40,14 @@ function atualizarBarra() {
     progresso.style.width = `${porcentagem}%`;
 }
 
+function limparEspacosFinais(texto) {
+  return texto
+    .split("\n")
+    .map(linha => linha.trimEnd())
+    .join("\n")
+    .trim();
+}
+
 function calcularMedia(maior, menor) {
   const max = parseInt(maior, 10);
   const min = parseInt(menor, 10);
@@ -125,7 +133,7 @@ function gerar() {
 *Q/Cc:* 
 *S/a:*`;
 
-    resultado.innerText = msg;
+    resultado.innerText = limparEspacosFinais(msg);
     gerarCard();
 }
 
