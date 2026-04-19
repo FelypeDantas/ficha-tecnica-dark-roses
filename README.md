@@ -1,25 +1,26 @@
 # 🌹 Dark Roses Form
 
 ![Status](https://img.shields.io/badge/status-em%20desenvolvimento-8b0000)
-![Version](https://img.shields.io/badge/version-1.0-ff0000)
+![Version](https://img.shields.io/badge/version-1.1-ff0000)
 ![Made With](https://img.shields.io/badge/made%20with-JavaScript-blue)
 ![UI](https://img.shields.io/badge/UI-Dark%20Aesthetic-111)
 
-Sistema web desenvolvido para padronizar e facilitar o cadastro de membros do projeto **Dark Roses**, garantindo consistência, organização e uma experiência elegante para novos integrantes.
+> Um sistema elegante para transformar caos em padrão… e membros em identidade.
 
 ---
 
 ## ✨ Sobre o Projeto
 
-O **Dark Roses Form** foi criado para substituir o preenchimento manual de fichas no WhatsApp, evitando:
+O **Dark Roses Form** é um sistema web criado para padronizar o cadastro de membros do projeto **Dark Roses**, eliminando inconsistências e trazendo uma experiência fluida e visualmente marcante.
 
-- ❌ Erros de formatação (negrito, emojis)
-- ❌ Perda de informações
-- ❌ Falta de padronização
+Antes:
+- mensagens desalinhadas  
+- informações incompletas  
+- fichas inconsistentes  
 
-Com ele:
+Agora:
 
-> O usuário preenche → o sistema organiza → a ficha é gerada corretamente → o cartão é criado automaticamente.
+> O usuário preenche → o sistema valida → a ficha nasce perfeita → o cartão ganha vida.
 
 ---
 
@@ -28,39 +29,71 @@ Com ele:
 - 📋 Padronizar fichas do projeto  
 - 🎯 Reduzir erros humanos  
 - 🌹 Melhorar a experiência de entrada  
-- 🧾 Criar identidade visual para membros  
-- ⚙️ Facilitar o trabalho dos ADMs  
+- 🧾 Criar identidade visual forte para membros  
+- ⚙️ Facilitar o trabalho administrativo  
+- 🧠 Garantir consistência de dados  
 
 ---
 
 ## 🚀 Funcionalidades
 
-- 📋 Formulário guiado e intuitivo  
-- ✅ Validação de campos obrigatórios  
-- 🔥 Conteúdo +18 com opção personalizada  
-- 📊 Barra de progresso dinâmica  
-- 🎨 Temas visuais (Dark, Blood, Midnight)  
-- 📱 Responsivo (mobile-first)  
-- 🧾 Geração automática da ficha padrão  
-- 🎴 Cartão de membro personalizado  
-- 📛 Selo oficial "Dark Roses"  
-- 🧾 ID único automático  
-- 📸 Exportação do cartão como imagem  
+### 🧾 Formulário Inteligente
+- Campos organizados e intuitivos  
+- Validação de dados (nome, data, regras de capítulos)  
+- Tratamento automático de erros  
+
+### 📊 Experiência do Usuário
+- Barra de progresso dinâmica  
+- Feedback visual em tempo real  
+- Campo “Outro” dinâmico (+18 personalizado)  
+
+### 🎨 Interface & Temas
+- Temas visuais:
+  - 🖤 Dark  
+  - 🩸 Blood  
+  - 🌌 Midnight  
+- UI com efeito glass + glow  
+- Totalmente responsivo  
+
+### 🧠 Geração Automatizada
+- 🧾 Ficha formatada pronta para uso  
+- ✂️ Limpeza automática de espaços  
+- 📋 Copiar com um clique  
+
+### 🎴 Cartão de Membro
+- Geração automática de card estilizado  
+- 🧾 ID único por membro  
+- 📛 Selo oficial “Dark Roses”  
+- 📸 Exportação como imagem (PNG)  
 
 ---
 
 ## 🎨 Design & Experiência
 
-O sistema foi projetado para transmitir:
+O projeto segue uma linha estética bem definida:
 
-- 🖤 Identidade forte  
-- 🎭 Estética sombria e elegante  
-- ✨ Sensação de produto profissional  
-- 🌹 Pertencimento à comunidade  
+- 🖤 Atmosfera sombria e elegante  
+- 🌹 Identidade forte e simbólica  
+- ✨ Sensação de produto refinado  
+- 🎭 Interface que reforça pertencimento  
+
+Mais que um formulário… é um ritual de entrada.
 
 ---
 
-## 🧠 Estrutura do Projeto
+## 🧠 Arquitetura (Front-end)
+
+O código foi estruturado visando crescimento e manutenção:
+
+- 🔹 Separação de responsabilidades (validação, geração, UI)  
+- 🔹 Controle centralizado de elementos DOM  
+- 🔹 Funções reutilizáveis e isoladas  
+- 🔹 Tratamento de erros e fallback (ex: html2canvas)  
+- 🔹 CSS organizado com variáveis e padrão visual escalável  
+
+---
+
+## 📁 Estrutura do Projeto
 
 ```bash
 📁 dark-roses-form
