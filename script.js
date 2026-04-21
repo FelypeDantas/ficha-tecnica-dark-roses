@@ -123,14 +123,18 @@ function validarFormulario() {
     return false;
   }
 
-  if (el.maior.value && el.menor.value) {
-    const max = parseInt(el.maior.value, 10);
-    const min = parseInt(el.menor.value, 10);
+  // 🔥 NOVA VALIDAÇÃO (maior e menor obrigatórios e positivos)
+  if (!validarNumeroPositivo(el.maior.value) || !validarNumeroPositivo(el.menor.value)) {
+    alert("Informe valores válidos e positivos para quantidade de palavras 🌹");
+    return false;
+  }
 
-    if (min > max) {
-      alert("O menor capítulo não pode ser maior que o maior 🌫️");
-      return false;
-    }
+  const max = parseInt(el.maior.value, 10);
+  const min = parseInt(el.menor.value, 10);
+
+  if (min > max) {
+    alert("O menor capítulo não pode ser maior que o maior 🌫️");
+    return false;
   }
 
   return true;
@@ -225,6 +229,11 @@ function calcularQC(maior, menor) {
 function formatarQC(qc) {
   if (qc === "-") return "-";
   return `${qc.cap}C.${qc.com}c.`;
+}
+
+function validarNumeroPositivo(valor) {
+  const n = Number(valor);
+  return Number.isFinite(n) && n > 0;
 }
 
 // 🧾 Montagem da mensagem (STRING PRESERVADA)
