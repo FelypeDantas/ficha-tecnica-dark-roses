@@ -177,18 +177,18 @@ function calcularQCavancado(maior, menor) {
 
   const fator = 1000;
 
-  const maxN = Math.max(1, Math.round(max / fator));
-  const minN = Math.max(1, Math.round(min / fator));
-  const mediaN = Math.max(1, Math.round(media / fator));
+  const maxN = Math.max(1, Math.floor(max / fator));
+  const minN = Math.max(1, Math.floor(min / fator));
+  const mediaN = Math.max(1, Math.floor(media / fator));
 
   const TETO = 35;
 
-  // 🔥 tenta encontrar valor válido até o teto
+  // 🌹 tenta encontrar o MENOR divisor válido até o teto
   for (let i = 1; i <= TETO; i++) {
     if (
-      i % maxN === 0 &&
-      i % minN === 0 &&
-      i % mediaN === 0
+      maxN % i === 0 &&
+      minN % i === 0 &&
+      mediaN % i === 0
     ) {
       return {
         cap: 1,
@@ -197,12 +197,16 @@ function calcularQCavancado(maior, menor) {
     }
   }
 
-  // 🌹 fallback inteligente → usa o menor normalizado
+  // 🌑 fallback inteligente → pega os dois primeiros dígitos do menor
+  const menorStr = String(min);
+  const fallback = Number(menorStr.slice(0, 2));
+
   return {
     cap: 1,
-    com: Math.min(minN, TETO)
+    com: Math.min(fallback, TETO)
   };
 }
+
 // função principal Q/Cc
 function calcularQC(maior, menor) {
   const max = Number(maior);
