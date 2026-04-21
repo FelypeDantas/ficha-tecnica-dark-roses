@@ -207,7 +207,7 @@ function calcularQC(maior, menor) {
 // formatação final
 function formatarQC(qc) {
   if (qc === "-") return "-";
-  return `${qc.cap}c.${qc.com}c.`;
+  return `${qc.cap}C.${qc.com}c.`;
 }
 
 // 🧾 Montagem da mensagem (STRING PRESERVADA)
