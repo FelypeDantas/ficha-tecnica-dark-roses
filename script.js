@@ -136,6 +136,80 @@ function validarFormulario() {
   return true;
 }
 
+// ===== Q/Cc =====
+
+// tabela até 10k (arredonda pra cima)
+function getTabelaQC(palavras) {
+  const p = Number(palavras);
+
+  if (p <= 100) return { cap: 10, com: 1 };
+  if (p <= 300) return { cap: 10, com: 1 };
+  if (p <= 400) return { cap: 8, com: 2 };
+  if (p <= 600) return { cap: 5, com: 4 };
+  if (p <= 800) return { cap: 4, com: 6 };
+  if (p <= 1000) return { cap: 3, com: 8 };
+  if (p <= 1500) return { cap: 2, com: 13 };
+  if (p <= 2000) return { cap: 2, com: 15 };
+  if (p <= 2500) return { cap: 1, com: 20 };
+  if (p <= 3000) return { cap: 1, com: 25 };
+  if (p <= 5000) return { cap: 1, com: 30 };
+  return { cap: 1, com: 35 }; // até 10k
+}
+
+// matemática base
+function mdc(a, b) {
+  return b === 0 ? a : mdc(b, a % b);
+}
+
+function mmc(a, b) {
+  return (a * b) / mdc(a, b);
+}
+
+// regra acima de 10k
+function calcularQCavancado(maior, menor) {
+  const max = Number(maior);
+  const min = Number(menor);
+  const media = Math.round((max + min) / 2);
+
+  const fator = 1000;
+
+  const maxN = Math.max(1, Math.round(max / fator));
+  const minN = Math.max(1, Math.round(min / fator));
+  const mediaN = Math.max(1, Math.round(media / fator));
+
+  const mmc1 = mmc(maxN, minN);
+  const mmcFinal = mmc(mmc1, mediaN);
+
+  return {
+    cap: 1,
+    com: mmcFinal
+  };
+}
+
+// função principal Q/Cc
+function calcularQC(maior, menor) {
+  const max = Number(maior);
+  const min = Number(menor);
+
+  if (!max || !min) return "-";
+
+  // até 10k → usa tabela (pela média)
+  const media = Math.round((max + min) / 2);
+
+  if (media <= 10000) {
+    return getTabelaQC(media);
+  }
+
+  // acima de 10k → regra avançada
+  return calcularQCavancado(max, min);
+}
+
+// formatação final
+function formatarQC(qc) {
+  if (qc === "-") return "-";
+  return `${qc.cap}c.${qc.com}c.`;
+}
+
 // 🧾 Montagem da mensagem (STRING PRESERVADA)
 function montarMensagem() {
   const mediaCalculada = calcularMedia(el.maior.value, el.menor.value);
@@ -167,7 +241,14 @@ function montarMensagem() {
 function gerar() {
   if (!validarFormulario()) return;
 
-  const msg = montarMensagem();
+  const qc = calcularQC(el.maior.value, el.menor.value);
+  const qcFormatado = formatarQC(qc);
+  
+  let msg = montarMensagem();
+
+  // substitui SOMENTE o campo Q/Cc
+  msg = msg.replace("*Q/Cc:*", `*Q/Cc:* ${qcFormatado}`);
+  
   el.resultado.innerText = limparEspacosFinais(msg);
 
   gerarCard();
