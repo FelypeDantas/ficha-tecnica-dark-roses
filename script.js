@@ -177,12 +177,29 @@ function calcularQCavancado(maior, menor) {
   const minN = Math.max(1, Math.round(min / fator));
   const mediaN = Math.max(1, Math.round(media / fator));
 
-  const mmc1 = mmc(maxN, minN);
-  const mmcFinal = mmc(mmc1, mediaN);
+  // começa do maior entre eles (já evita números muito baixos inválidos)
+  let candidato = Math.max(maxN, minN, mediaN);
 
+  // limite de segurança (evita loop infinito)
+  const LIMITE = 500;
+
+  for (let i = candidato; i <= LIMITE; i++) {
+    if (
+      i % maxN === 0 &&
+      i % minN === 0 &&
+      i % mediaN === 0
+    ) {
+      return {
+        cap: 1,
+        com: i
+      };
+    }
+  }
+
+  // fallback caso não encontre (raro)
   return {
     cap: 1,
-    com: mmcFinal
+    com: candidato
   };
 }
 
