@@ -181,12 +181,10 @@ function calcularQCavancado(maior, menor) {
   const minN = Math.max(1, Math.round(min / fator));
   const mediaN = Math.max(1, Math.round(media / fator));
 
-  let candidato = Math.max(maxN, minN, mediaN);
+  const TETO = 35;
 
-  const LIMITE = 500;
-  const TETO = 35; // 🌹 novo limite
-
-  for (let i = candidato; i <= LIMITE; i++) {
+  // 🔥 tenta encontrar valor válido até o teto
+  for (let i = 1; i <= TETO; i++) {
     if (
       i % maxN === 0 &&
       i % minN === 0 &&
@@ -194,18 +192,17 @@ function calcularQCavancado(maior, menor) {
     ) {
       return {
         cap: 1,
-        com: Math.min(i, TETO) // 🔥 trava no máximo 35
+        com: i
       };
     }
   }
 
-  // fallback
+  // 🌹 fallback inteligente → usa o menor normalizado
   return {
     cap: 1,
-    com: Math.min(candidato, TETO)
+    com: Math.min(minN, TETO)
   };
 }
-
 // função principal Q/Cc
 function calcularQC(maior, menor) {
   const max = Number(maior);
