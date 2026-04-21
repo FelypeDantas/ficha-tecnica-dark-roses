@@ -181,11 +181,10 @@ function calcularQCavancado(maior, menor) {
   const minN = Math.max(1, Math.round(min / fator));
   const mediaN = Math.max(1, Math.round(media / fator));
 
-  // começa do maior entre eles (já evita números muito baixos inválidos)
   let candidato = Math.max(maxN, minN, mediaN);
 
-  // limite de segurança (evita loop infinito)
   const LIMITE = 500;
+  const TETO = 35; // 🌹 novo limite
 
   for (let i = candidato; i <= LIMITE; i++) {
     if (
@@ -195,15 +194,15 @@ function calcularQCavancado(maior, menor) {
     ) {
       return {
         cap: 1,
-        com: i
+        com: Math.min(i, TETO) // 🔥 trava no máximo 35
       };
     }
   }
 
-  // fallback caso não encontre (raro)
+  // fallback
   return {
     cap: 1,
-    com: candidato
+    com: Math.min(candidato, TETO)
   };
 }
 
