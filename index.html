@@ -41,14 +41,14 @@
                 <legend>🌹 Identidade</legend>
 
                 <label for="nome">Nome ou pseudônimo</label>
-                <input id="nome" required placeholder="Nome completo ou pseudônimo (Ex: Byanca Matos ou Autora Sombria)">
+                <input id="nome" required placeholder="Nome completo ou pseudônimo (Ex: Byanca Matos ou Autora Sombria)" required>
                 <small>Esse será o nome exibido na ficha</small>
 
                 <label for="data">Data de nascimento</label>
                 <input  id="data" 
                         placeholder="Ex: 12/03/2002"
                         pattern="^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$"
-                        title="Use o formato dd/mm/aaaa (Ex: 12/03/2002)">
+                        title="Use o formato dd/mm/aaaa (Ex: 12/03/2002)" required>
             </fieldset>
 
             <!-- OBRA -->
@@ -56,13 +56,13 @@
                 <legend>📖 Sobre a Obra</legend>
 
                 <label for="titulo">Título do livro</label>
-                <input id="titulo" placeholder="Ex: O Pacto Celestial">
+                <input id="titulo" placeholder="Ex: O Pacto Celestial" required>
 
                 <label for="user">Usuário no Wattpad</label>
-                <input id="user" placeholder="Ex: @byanca_writes">
+                <input id="user" placeholder="Ex: @byanca_writes" required>
 
                 <label for="genero">Gênero literário</label>
-                <input id="genero" placeholder="Ex: Fantasia, Romance, Terror">
+                <input id="genero" placeholder="Ex: Fantasia, Romance, Terror" required>
             </fieldset>
 
             <!-- CONTEÚDO -->
@@ -96,10 +96,10 @@
                 <legend>💬 Participação</legend>
 
                 <label for="feedback">Deseja participar de feedbacks? (Feedbacks são mútuos; não é possível apenas receber)</label>
-                <input id="feedback" placeholder="Ex: Sim / Não">
+                <input id="feedback" placeholder="Ex: Sim / Não" required>
 
                 <label for="capEspeciais">Possui capítulos especiais? (Capítulos curtos com menos de 300 palavras)</label>
-                <input id="capEspeciais" placeholder="Ex: Capitulo 1, Capitulo 10">
+                <input id="capEspeciais" placeholder="Ex: Capitulo 1, Capitulo 10" required>
             </fieldset>
 
             <!-- DETALHES -->
@@ -116,7 +116,7 @@
                 <small>A média será calculada automaticamente com base nos valores acima.</small>
 
                 <label for="link">Link da obra</label>
-                <input id="link" placeholder="https://www.wattpad.com/...">
+                <input id="link" placeholder="https://www.wattpad.com/..." required>
             </fieldset>
 
             <!-- AÇÕES -->
