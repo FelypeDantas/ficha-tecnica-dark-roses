@@ -96,7 +96,17 @@
                 <legend>💬 Participação</legend>
 
                 <label for="feedback">Deseja participar de feedbacks? (Feedbacks são mútuos; não é possível apenas receber)</label>
-                <input id="feedback" placeholder="Ex: Sim / Não" required>
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" name="feedback" value="Sim" required>
+                        Sim
+                    </label>
+            
+                    <label>
+                        <input type="radio" name="feedback" value="Não">
+                        Não
+                    </label>
+                </div>
 
                 <label for="capEspeciais">Possui capítulos especiais? (Capítulos curtos com menos de 300 palavras)</label>
                 <input id="capEspeciais" placeholder="Ex: Capitulo 1, Capitulo 10" required>
