@@ -6,7 +6,6 @@ const el = {
   user: document.getElementById("user"),
   genero: document.getElementById("genero"),
   gatilhos: document.getElementById("gatilhos"),
-  feedback: document.getElementById("feedback"),
   capEspeciais: document.getElementById("capEspeciais"),
   link: document.getElementById("link"),
   maior: document.getElementById("maior"),
@@ -18,6 +17,11 @@ const el = {
   resultado: document.getElementById("resultado"),
   cardContainer: document.getElementById("cardContainer"),
 };
+
+function getFeedback() {
+  const selecionado = document.querySelector('input[name="feedback"]:checked');
+  return selecionado ? selecionado.value : "-";
+}
 
 // apenas inputs relevantes para progresso
 const inputs = document.querySelectorAll("input[type='text'], input[type='date']");
@@ -252,7 +256,7 @@ function montarMensagem() {
 *🌫️ Gênero Literário:* ${el.genero.value}
 *🌹 Contém conteúdo +18?  (Se sim, especifique: tortura, suicídio, abuso, drogas, etc.):* ${getCheckboxes()}.
 *🌫️ Você possui gatilhos ou desconfortos ao ler conteúdo +18? (Se sim, quais?):* ${el.gatilhos.value}.
-*🌹 Deseja participar de feedbacks? (Feedbacks são mútuos; não é possível apenas receber):* ${el.feedback.value}.
+*🌹 Deseja participar de feedbacks? (Feedbacks são mútuos; não é possível apenas receber):* ${getFeedback()}.
 *🌫️ Possui capítulos especiais? (Capítulos curtos com menos de 300 palavras):* ${el.capEspeciais.value}.
 *🌹 Quantidade de palavras (${palavrasFormatadas}):*
 *🌫️ Link da Obra:* ${el.link.value}
@@ -354,7 +358,7 @@ function gerarCard() {
 
       <div class="info">
         <span>💬 Feedbacks</span>
-        <strong>${el.feedback.value || "-"}</strong>
+        <strong>${getFeedback() || "-"}</strong>
       </div>
 
       <div class="id">ID: ${idMembro}</div>
