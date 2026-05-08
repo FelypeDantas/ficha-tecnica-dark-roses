@@ -253,15 +253,16 @@ button:hover::after {
   cursor: pointer;
 }
 
-/*====== Radios ====== */
 /* ===== RADIOS ===== */
+/* ===== RADIO GROUP ===== */
 .radio-group {
   display: flex;
-  gap: var(--space-sm);
+  gap: 12px;
+  margin-top: 14px;
   flex-wrap: wrap;
-  margin: var(--space-sm) 0 var(--space-md);
 }
 
+/* ===== OPTION ===== */
 .radio-group label {
   position: relative;
 
@@ -269,35 +270,37 @@ button:hover::after {
   align-items: center;
   gap: 10px;
 
-  padding: 12px 16px;
+  min-width: 110px;
+  padding: 14px 18px;
 
   border-radius: var(--radius);
 
   background:
-    linear-gradient(145deg, var(--card), rgba(255,255,255,0.02));
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,0.03),
+      rgba(255,255,255,0.015)
+    );
 
   border: 1px solid var(--border);
 
   cursor: pointer;
-  overflow: hidden;
 
   transition: var(--transition);
+  overflow: hidden;
 }
 
-/* brilho suave */
-.radio-group label::before {
+/* glow interno suave */
+.radio-group label::after {
   content: "";
 
   position: absolute;
   inset: 0;
 
   background:
-    linear-gradient(
-      120deg,
-      transparent,
-      rgba(255,255,255,0.05),
-      transparent
-    );
+    radial-gradient(circle at top left,
+      rgba(255,255,255,0.08),
+      transparent 60%);
 
   opacity: 0;
   transition: var(--transition);
@@ -307,39 +310,39 @@ button:hover::after {
 .radio-group label:hover {
   transform: translateY(-2px);
 
-  border-color: var(--primary);
+  border-color: rgba(255,255,255,0.12);
 
   box-shadow:
-    0 0 12px var(--glow),
-    inset 0 0 10px rgba(255,255,255,0.03);
+    0 0 15px rgba(0,0,0,0.35),
+    0 0 10px var(--glow);
 }
 
-.radio-group label:hover::before {
+.radio-group label:hover::after {
   opacity: 1;
 }
 
-/* remove estilo padrão */
+/* ===== RADIO ===== */
 .radio-group input[type="radio"] {
   appearance: none;
 
   width: 18px;
   height: 18px;
 
+  margin: 0;
+
   border-radius: 50%;
 
-  border: 2px solid var(--primary);
-
-  background: transparent;
+  border: 2px solid rgba(255,255,255,0.35);
 
   display: grid;
   place-content: center;
 
   transition: var(--transition);
 
-  margin: 0;
+  flex-shrink: 0;
 }
 
-/* bolinha interna */
+/* bolinha */
 .radio-group input[type="radio"]::before {
   content: "";
 
@@ -348,36 +351,45 @@ button:hover::after {
 
   border-radius: 50%;
 
+  background: var(--primary);
+
   transform: scale(0);
 
   transition: 0.2s;
 
-  background: var(--primary);
-
   box-shadow: 0 0 10px var(--glow);
 }
 
-/* selecionado */
+.radio-group input[type="radio"]:checked {
+  border-color: var(--primary);
+}
+
 .radio-group input[type="radio"]:checked::before {
   transform: scale(1);
 }
 
-/* card selecionado */
+/* ===== TEXTO ===== */
+.radio-group span {
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+/* ===== SELECIONADO ===== */
 .radio-group label:has(input:checked) {
   border-color: var(--primary);
 
   background:
     linear-gradient(
       145deg,
-      rgba(255,255,255,0.05),
+      rgba(255,255,255,0.06),
       rgba(255,255,255,0.02)
     );
 
   box-shadow:
-    0 0 18px var(--glow),
-    inset 0 0 12px rgba(255,255,255,0.03);
+    0 0 20px var(--glow),
+    inset 0 0 15px rgba(255,255,255,0.03);
 }
-
 /* ===== RESULTADO ===== */
 #resultado {
   white-space: pre-wrap;
