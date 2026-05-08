@@ -58,16 +58,41 @@ function corrigirData() {
 
   if (!valor) return;
 
-  // aceita / - .
-  valor = valor.replace(/[-.]/g, "/");
+  // remove tudo que não for número
+  const numeros = valor.replace(/\D/g, "");
 
-  const partes = valor.split("/");
+  // tenta interpretar automaticamente
+  let dia = "";
+  let mes = "";
+  let ano = "";
 
-  if (partes.length !== 3) return;
+  // 7 dígitos → ex: 2102003
+  if (numeros.length === 7) {
+    dia = numeros.slice(0, 1);
+    mes = numeros.slice(1, 3);
+    ano = numeros.slice(3);
+  }
 
-  let [dia, mes, ano] = partes;
+  // 8 dígitos → ex: 02102003
+  else if (numeros.length === 8) {
+    dia = numeros.slice(0, 2);
+    mes = numeros.slice(2, 4);
+    ano = numeros.slice(4);
+  }
 
-  // adiciona zero automaticamente
+  // digitado com separadores
+  else {
+
+    valor = valor.replace(/[-.]/g, "/");
+
+    const partes = valor.split("/");
+
+    if (partes.length !== 3) return;
+
+    [dia, mes, ano] = partes;
+  }
+
+  // adiciona zeros
   dia = dia.padStart(2, "0");
   mes = mes.padStart(2, "0");
 
