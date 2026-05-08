@@ -253,6 +253,27 @@ button:hover::after {
   cursor: pointer;
 }
 
+/*====== Radios ====== */
+.radio-group{
+    display:flex;
+    gap:15px;
+    margin-top:10px;
+}
+
+.radio-group label{
+    background:#1b1b1b;
+    padding:10px 15px;
+    border-radius:10px;
+    cursor:pointer;
+    transition:.3s;
+    border:1px solid #333;
+}
+
+.radio-group label:hover{
+    border-color:#ff4d6d;
+    transform:scale(1.03);
+}
+
 /* ===== RESULTADO ===== */
 #resultado {
   white-space: pre-wrap;
