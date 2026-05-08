@@ -51,6 +51,17 @@ function toggleOutro() {
   }
 }
 
+function validarNomeCompleto(nome) {
+
+  // remove espaços duplicados
+  const partes = nome
+    .trim()
+    .split(/\s+/)
+    .filter(p => p.length >= 2);
+
+  return partes.length >= 2;
+}
+
 // 🌹 Corrige e formata automaticamente
 function corrigirData() {
 
@@ -173,6 +184,11 @@ function validarData(dataStr) {
 function validarFormulario() {
   if (!el.nome.value.trim()) {
     alert("Nome obrigatório 🌹");
+    return false;
+  }
+
+  if (!validarNomeCompleto(el.nome.value)) {
+    alert("Digite pelo menos nome e sobrenome 🌫️");
     return false;
   }
 
