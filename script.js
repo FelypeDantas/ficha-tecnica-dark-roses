@@ -10,7 +10,6 @@ const el = {
   link: document.getElementById("link"),
   maior: document.getElementById("maior"),
   menor: document.getElementById("menor"),
-
   progresso: document.getElementById("progresso"),
   outroCheck: document.getElementById("outroCheck"),
   outroTexto: document.getElementById("outroTexto"),
@@ -53,13 +52,18 @@ function toggleOutro() {
 
 function validarNomeCompleto(nome) {
 
-  // remove espaços duplicados
-  const partes = nome
-    .trim()
-    .split(/\s+/)
-    .filter(p => p.length >= 2);
+  // remove espaços extras
+  nome = nome.trim().replace(/\s+/g, " ");
 
-  return partes.length >= 2;
+  const partes = nome.split(" ");
+
+  // precisa ter pelo menos 2 palavras
+  if (partes.length < 2) {
+    return false;
+  }
+
+  // cada parte precisa ter pelo menos 2 letras
+  return partes.every(parte => parte.length >= 2);
 }
 
 // 🌹 Corrige e formata automaticamente
@@ -189,6 +193,7 @@ function validarFormulario() {
 
   if (!validarNomeCompleto(el.nome.value)) {
     alert("Digite pelo menos nome e sobrenome 🌫️");
+    el.nome.focus();
     return false;
   }
 
