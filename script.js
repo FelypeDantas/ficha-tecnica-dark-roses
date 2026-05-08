@@ -19,6 +19,11 @@ const el = {
   cardContainer: document.getElementById("cardContainer"),
 };
 
+document.getElementById("formFicha").addEventListener("submit", function(e) {
+    e.preventDefault();
+    gerar();
+});
+
 // apenas inputs relevantes para progresso
 const inputs = document.querySelectorAll("input[type='text'], input[type='date']");
 
