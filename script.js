@@ -29,6 +29,9 @@ const inputs = document.querySelectorAll("input[type='text'], input[type='date']
 // ===== EVENTOS =====
 el.outroCheck.addEventListener("change", toggleOutro);
 
+// 🌫️ formatação automática da data
+el.data.addEventListener("blur", corrigirData);
+
 inputs.forEach(input => {
   input.addEventListener("input", atualizarBarra);
 });
@@ -46,6 +49,32 @@ function toggleOutro() {
   } else {
     el.outroTexto.value = "";
   }
+}
+
+// 🌹 Corrige e formata automaticamente
+function corrigirData() {
+
+  let valor = el.data.value.trim();
+
+  if (!valor) return;
+
+  // aceita / - .
+  valor = valor.replace(/[-.]/g, "/");
+
+  const partes = valor.split("/");
+
+  if (partes.length !== 3) return;
+
+  let [dia, mes, ano] = partes;
+
+  // adiciona zero automaticamente
+  dia = dia.padStart(2, "0");
+  mes = mes.padStart(2, "0");
+
+  // limita ano
+  ano = ano.slice(0, 4);
+
+  el.data.value = `${dia}/${mes}/${ano}`;
 }
 
 // 🆔 ID mais seguro
