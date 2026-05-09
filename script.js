@@ -125,6 +125,43 @@ function gerarID() {
   return `DR-${Math.floor(100000 + Math.random() * 900000)}`;
 }
 
+async function enviarFicha(conteudo) {
+
+  try {
+
+    const resposta = await fetch("https://SEU-SITE.com/api/fichas", {
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+      body: JSON.stringify({
+        conteudo,
+        titulo: el.titulo.value
+      }),
+    });
+
+    const json = await resposta.json();
+
+    if (!resposta.ok) {
+      throw new Error(json.error || "Erro ao enviar");
+    }
+
+    console.log("Ficha enviada ✨", json);
+
+    return true;
+
+  } catch (erro) {
+
+    console.error(erro);
+
+    alert("Erro ao enviar ficha 🌫️");
+
+    return false;
+  }
+}
+
 // 📊 Progresso
 function atualizarBarra() {
   let preenchidos = 0;
@@ -343,20 +380,30 @@ function montarMensagem() {
 }
 
 // 🎯 AÇÃO PRINCIPAL
-function gerar() {
+async function gerar() {
+
   if (!validarFormulario()) return;
 
   const qc = calcularQC(el.maior.value, el.menor.value);
   const qcFormatado = formatarQC(qc);
-  
+
   let msg = montarMensagem();
 
-  // substitui SOMENTE o campo Q/Cc
-  msg = msg.replace("*Q/Cc:*", `*Q/Cc:* ${qcFormatado}`);
-  
+  msg = msg.replace(
+    "*Q/Cc:*",
+    `*Q/Cc:* ${qcFormatado}`
+  );
+
   el.resultado.innerText = limparEspacosFinais(msg);
 
   gerarCard();
+
+  // ✨ ENVIA PRO SISTEMA
+  const enviado = await enviarFicha(msg);
+
+  if (enviado) {
+    alert("Ficha enviada para Dark Roses 🌹");
+  }
 }
 
 // 📋 Copiar
