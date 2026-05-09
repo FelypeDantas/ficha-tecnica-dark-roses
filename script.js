@@ -129,7 +129,7 @@ async function enviarFicha(conteudo) {
 
   try {
 
-    const resposta = await fetch("https://SEU-SITE.com/api/fichas", {
+    const resposta = await fetch("https://armazenador-de-fichas-two.vercel.app", {
       method: "POST",
 
       headers: {
