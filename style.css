@@ -470,6 +470,13 @@ button:hover::after {
 
 .card .info strong {
   text-align: right;
+  
+  /* quebra links grandes */
+  word-break: break-word;
+  overflow-wrap: anywhere;
+
+  /* impede estourar layout */
+  max-width: 60%;
 }
 
 .card .id {
@@ -571,6 +578,16 @@ button:hover::after {
 
   #barra {
     height: 16px;
+  }
+
+  .card .info {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .card .info strong {
+    max-width: 100%;
+    text-align: left;
   }
 
   #resultado {
