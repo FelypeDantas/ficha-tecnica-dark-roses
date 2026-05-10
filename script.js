@@ -50,23 +50,6 @@ el.data.addEventListener("input", e => {
   e.target.value = v;
 });
 
-//reconhece o título pelo link
-el.link.addEventListener("input", () => {
-
-  const link = el.link.value;
-
-  const match = link.match(/story\/\d+-(.+)/);
-
-  if (match && !el.titulo.value) {
-
-    const titulo = match[1]
-      .replace(/-/g, " ")
-      .replace(/\b\w/g, l => l.toUpperCase());
-
-    el.titulo.value = titulo;
-  }
-});
-
 // ===== FUNÇÕES =====
 
 // 🌹 UI
