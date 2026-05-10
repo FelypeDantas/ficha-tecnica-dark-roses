@@ -35,6 +35,12 @@ inputs.forEach(input => {
   input.addEventListener("input", atualizarBarra);
 });
 
+el.user.addEventListener("blur", () => {
+  if (el.user.value && !el.user.value.startsWith("@")) {
+    el.user.value = "@" + el.user.value;
+  }
+});
+
 // ===== FUNÇÕES =====
 
 // 🌹 UI
