@@ -409,7 +409,17 @@ async function gerar() {
     `*Q/Cc:* ${qcFormatado}`
   );
 
-  el.resultado.innerText = limparEspacosFinais(msg);
+ const mensagemFinal = limparEspacosFinais(msg);
+
+  el.resultado.innerText = mensagemFinal;
+
+  // 📋 copia automática
+  try {
+    await navigator.clipboard.writeText(mensagemFinal);
+    alert("Ficha copiada 🌹");
+  } catch (erro) {
+    alert("Erro ao copiar:", erro);
+  }
 
   gerarCard();
 
@@ -419,17 +429,6 @@ async function gerar() {
   if (enviado) {
     alert("Ficha enviada para Dark Roses 🌹");
   }
-}
-
-// 📋 Copiar
-function copiar() {
-  if (!el.resultado.innerText) {
-    alert("Nada para copiar 🌫️");
-    return;
-  }
-
-  navigator.clipboard.writeText(el.resultado.innerText);
-  alert("Copiado 🌹");
 }
 
 // 🖼️ Exportar card
