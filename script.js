@@ -1,4 +1,3 @@
-
 /* =====================================================
    DARK ROSES | SISTEMA PRINCIPAL
    Versão aprimorada
@@ -10,7 +9,6 @@
 ===================================================== */
 
 const CONFIG = {
-    apiUrl: "https://armazenador-de-fichas-two.vercel.app/api/fichas",
     cardFileName: "dark-roses-card.png",
     exportScale: 3,
     temas: ["dark", "blood", "midnight"]
@@ -71,6 +69,37 @@ const estado = {
 document.addEventListener("DOMContentLoaded", inicializar);
 
 function inicializar() {
+
+    const elementosEssenciais = [
+        el.form,
+        el.nome,
+        el.data,
+        el.titulo,
+        el.user,
+        el.genero,
+        el.gatilhos,
+        el.capEspeciais,
+        el.capEspeciaisContainer,
+        el.link,
+        el.maior,
+        el.menor,
+        el.progresso,
+        el.barra,
+        el.outroCheck,
+        el.outroTexto,
+        el.outroContainer,
+        el.nenhumConteudo,
+        el.resultado,
+        el.cardContainer,
+        el.baixarCardBtn
+    ];
+
+    if (elementosEssenciais.some(elemento => !elemento)) {
+        console.error(
+            "Dark Roses: um ou mais elementos esperados não foram encontrados no HTML."
+        );
+        return;
+    }
 
     configurarEventos();
 
@@ -332,7 +361,7 @@ function atualizarBarra() {
     // Feedback
     total++;
 
-    if (getFeedback()) {
+    if (document.querySelector('input[name="feedback"]:checked')) {
         preenchidos++;
     }
 
@@ -580,11 +609,12 @@ function validarFormulario() {
         return false;
     }
 
-    if (!getFeedback()) {
+    const feedbackSelecionado = document.querySelector(
+        'input[name="feedback"]:checked'
+    );
 
-        document.querySelector(
-            'input[name="feedback"]'
-        ).focus();
+    if (!feedbackSelecionado) {
+        document.querySelector('input[name="feedback"]')?.focus();
 
         alert("Selecione sua preferência de feedback.");
 
@@ -679,7 +709,6 @@ function validarFormulario() {
 
     return true;
 }
-
 
 /* =====================================================
    14. CÁLCULO DE MÉDIA
@@ -852,64 +881,6 @@ function montarMensagem() {
 *S/a:*`;
 }
 
-
-/* =====================================================
-   17. ENVIO PARA API
-===================================================== */
-
-async function enviarFicha(conteudo) {
-
-    try {
-
-        const resposta = await fetch(CONFIG.apiUrl, {
-
-            method: "POST",
-
-            headers: {
-                "Content-Type": "application/json"
-            },
-
-            body: JSON.stringify({
-                conteudo,
-                titulo: el.titulo.value.trim()
-            })
-
-        });
-
-        let json = {};
-
-        try {
-            json = await resposta.json();
-        } catch {
-            json = {};
-        }
-
-        if (!resposta.ok) {
-
-            throw new Error(
-                json.error || `Erro HTTP ${resposta.status}`
-            );
-        }
-
-        console.log("Ficha enviada ao Dark Roses ✨", json);
-
-        return {
-            sucesso: true,
-            dados: json
-        };
-
-    } catch (erro) {
-
-        console.error("Erro ao enviar ficha:", erro);
-
-        return {
-            sucesso: false,
-            erro
-        };
-    }
-}
-
-
 /* =====================================================
    18. CÓPIA DA FICHA
 ===================================================== */
@@ -967,18 +938,17 @@ async function gerar() {
 
     estado.gerando = true;
 
-    const botao = el.form.querySelector(
-        ".acoes button"
-    );
+    const botao = el.form.querySelector(".acoes button");
+    const textoOriginal = botao?.textContent || "";
 
-    const textoOriginal = botao.textContent;
-
-    botao.disabled = true;
-    botao.textContent = "Gerando ficha...";
+    if (botao) {
+        botao.disabled = true;
+        botao.textContent = "Gerando ficha...";
+    }
 
     try {
 
-        // Q/Cc.
+        // Q/Cc. As regras originais foram mantidas.
         const qc = calcularQC(
             el.maior.value,
             el.menor.value
@@ -986,7 +956,7 @@ async function gerar() {
 
         const qcFormatado = formatarQC(qc);
 
-        // Mensagem.
+        // Montagem da mensagem.
         let msg = montarMensagem();
 
         msg = msg.replace(
@@ -996,40 +966,22 @@ async function gerar() {
 
         const mensagemFinal = limparEspacosFinais(msg);
 
-        // Resultado.
+        // Exibição do resultado.
         el.resultado.textContent = mensagemFinal;
         el.resultado.hidden = false;
 
-        // Cartão.
+        // Geração do cartão visual.
         gerarCard();
 
-        // Cópia.
+        // Cópia local. Não há envio para servidor.
         const copiado = await copiarTexto(mensagemFinal);
 
         if (copiado) {
-            console.log("Ficha copiada 🌹");
+            alert("Ficha gerada e copiada! 🌹");
         } else {
-            console.warn("Não foi possível copiar automaticamente.");
-        }
-
-        // Envio para o armazenamento.
-        const envio = await enviarFicha(mensagemFinal);
-
-        // Retorno ao usuário.
-        if (envio.sucesso) {
-
             alert(
-                copiado
-                    ? "Ficha copiada e enviada para Dark Roses! 🌹"
-                    : "Ficha enviada para Dark Roses! 🌹"
-            );
-
-        } else {
-
-            alert(
-                copiado
-                    ? "Ficha copiada, mas não foi possível enviá-la ao servidor. Você ainda pode utilizar a ficha normalmente."
-                    : "A ficha foi gerada, mas houve problemas na cópia e no envio."
+                "Ficha gerada! Não foi possível copiá-la automaticamente. " +
+                "Você ainda pode selecionar e copiar o texto exibido. 🌫️"
             );
         }
 
@@ -1043,8 +995,10 @@ async function gerar() {
 
         estado.gerando = false;
 
-        botao.disabled = false;
-        botao.textContent = textoOriginal;
+        if (botao) {
+            botao.disabled = false;
+            botao.textContent = textoOriginal;
+        }
     }
 }
 
@@ -1076,98 +1030,157 @@ function criarElemento(tag, classe, texto) {
 function gerarCard() {
 
     const idMembro = estado.ultimoID || gerarID();
-
     estado.ultimoID = idMembro;
 
-    // Container.
-    const card = criarElemento("div", "card");
+    const card = criarElemento("div", "dr-card");
 
-    // Selo.
-    const selo = criarElemento(
+    // Moldura ornamental: os quatro cantos são elementos reais,
+    // além dos detalhes decorativos definidos no CSS.
+    ["tl", "tr", "bl", "br"].forEach(posicao => {
+        card.appendChild(
+            criarElemento("span", `dr-corner dr-corner--${posicao}`)
+        );
+    });
+
+    // Cabeçalho da identidade visual.
+    const header = criarElemento("header", "dr-header");
+    const rose = criarElemento("div", "dr-rose", "🌹");
+    const brand = criarElemento("div", "dr-brand", "DARK ROSES");
+    const subtitle = criarElemento(
         "div",
-        "selo",
-        "🌹 Dark Roses"
-    );
-
-    card.appendChild(selo);
-
-    // Nome.
-    const nome = criarElemento(
-        "h3",
-        "",
-        el.nome.value.trim()
-    );
-
-    card.appendChild(nome);
-
-    // Subtítulo.
-    const sub = criarElemento(
-        "div",
-        "sub",
+        "dr-subtitle",
         "MEMBRO OFICIAL"
     );
 
-    card.appendChild(sub);
+    header.append(rose, brand, subtitle);
+    card.appendChild(header);
+    card.appendChild(criarElemento("div", "dr-divider"));
 
-    // Informações.
-    const informacoes = [
+    // Identidade do membro.
+    const identity = criarElemento("section", "dr-identity");
+    identity.appendChild(
+        criarElemento("h2", "dr-name", el.nome.value.trim())
+    );
+    identity.appendChild(
+        criarElemento("p", "dr-date", `Nascimento: ${el.data.value}`)
+    );
+    card.appendChild(identity);
 
-        ["📖 Livro", el.titulo.value.trim()],
+    // Selo de autenticidade.
+    const seal = criarElemento("div", "dr-seal");
+    seal.appendChild(
+        criarElemento("span", "dr-seal-symbol", "✦")
+    );
+    seal.appendChild(
+        criarElemento("span", "dr-seal-text", "FICHA AUTÊNTICA")
+    );
+    card.appendChild(seal);
 
-        ["🎭 Gênero", el.genero.value.trim()],
+    // Auxiliares para manter a estrutura do cartão consistente.
+    const criarSecao = (titulo) => {
+        const secao = criarElemento("section", "dr-section");
+        secao.appendChild(
+            criarElemento("h3", "dr-section-title", titulo)
+        );
+        return secao;
+    };
 
-        ["👤 Wattpad", el.user.value],
+    const adicionarInfo = (secao, rotulo, valor) => {
+        const linha = criarElemento("div", "dr-info");
+        linha.appendChild(
+            criarElemento("span", "dr-info-label", rotulo)
+        );
+        linha.appendChild(
+            criarElemento(
+                "strong",
+                "dr-info-value",
+                valor && String(valor).trim() ? String(valor).trim() : "Não informado"
+            )
+        );
+        secao.appendChild(linha);
+    };
 
-        ["📅 Nascimento", el.data.value],
+    // Obra e perfil.
+    const secaoObra = criarSecao("OBRA & PERFIL");
+    adicionarInfo(secaoObra, "Título", el.titulo.value);
+    adicionarInfo(secaoObra, "Gênero literário", el.genero.value);
+    adicionarInfo(secaoObra, "Wattpad", el.user.value);
 
-        ["💬 Feedbacks", getFeedback()]
+    const linhaLink = criarElemento("div", "dr-info");
+    linhaLink.appendChild(
+        criarElemento("span", "dr-info-label", "Link da obra")
+    );
 
+    const linkObra = criarElemento("a", "dr-info-value", "Acessar obra");
+    const urlObra = new URL(el.link.value.trim());
+    linkObra.href = urlObra.href;
+    linkObra.target = "_blank";
+    linkObra.rel = "noopener noreferrer";
+    linhaLink.appendChild(linkObra);
+
+    secaoObra.appendChild(linhaLink);
+    card.appendChild(secaoObra);
+
+    // Preferências e informações de leitura.
+    const secaoLeitura = criarSecao("LEITURA & PREFERÊNCIAS");
+    adicionarInfo(secaoLeitura, "Conteúdo sensível", getCheckboxes());
+    adicionarInfo(
+        secaoLeitura,
+        "Gatilhos e desconfortos",
+        el.gatilhos.value.trim() || "Não informado"
+    );
+    adicionarInfo(secaoLeitura, "Participa de feedbacks", getFeedback());
+    adicionarInfo(
+        secaoLeitura,
+        "Capítulos especiais",
+        getCapEspeciais()
+    );
+    card.appendChild(secaoLeitura);
+
+    // Estatísticas da obra.
+    const secaoEstatisticas = criarSecao("ESTATÍSTICAS DA OBRA");
+    const stats = criarElemento("div", "dr-stats");
+
+    const media = calcularMedia(el.maior.value, el.menor.value);
+    const estatisticas = [
+        ["dr-stat", el.maior.value, "MAIOR CAPÍTULO"],
+        ["dr-stat", el.menor.value, "MENOR CAPÍTULO"],
+        ["dr-stat", media, "MÉDIA PADRÃO"]
     ];
 
-    informacoes.forEach(([rotulo, valor]) => {
-
-        const linha = criarElemento("div", "info");
-
-        const label = criarElemento(
-            "span",
-            "",
-            rotulo
+    estatisticas.forEach(([, valor, rotulo]) => {
+        const item = criarElemento("div", "dr-stat");
+        item.appendChild(
+            criarElemento("strong", "dr-stat-value", String(valor))
         );
-
-        const conteudo = criarElemento(
-            "strong",
-            "",
-            valor || "-"
+        item.appendChild(
+            criarElemento("span", "dr-stat-label", rotulo)
         );
-
-        linha.append(label, conteudo);
-
-        card.appendChild(linha);
+        stats.appendChild(item);
     });
 
-    // Identificador.
-    const id = criarElemento(
-        "div",
-        "id",
-        `ID: ${idMembro}`
+    secaoEstatisticas.appendChild(stats);
+    card.appendChild(secaoEstatisticas);
+
+    // Rodapé e identificador exclusivo.
+    const footer = criarElemento("footer", "dr-footer");
+    footer.appendChild(
+        criarElemento(
+            "span",
+            "dr-footer-message",
+            "Escritores unidos pela arte"
+        )
     );
-
-    card.appendChild(id);
-
-    // Rodapé.
-    const footer = criarElemento(
-        "div",
-        "footer",
-        "Dark Roses Society • Escritores unidos pela arte"
+    footer.appendChild(
+        criarElemento("strong", "dr-id", `ID: ${idMembro}`)
     );
-
+    footer.appendChild(
+        criarElemento("span", "dr-footer-brand", "DARK ROSES SOCIETY")
+    );
     card.appendChild(footer);
 
-    // Atualiza o container.
     el.cardContainer.replaceChildren(card);
-
     el.cardContainer.hidden = false;
-
     el.baixarCardBtn.hidden = false;
 
     return card;
@@ -1180,7 +1193,7 @@ function gerarCard() {
 
 async function baixarCard() {
 
-    const card = el.cardContainer.querySelector(".card");
+    const card = el.cardContainer.querySelector(".dr-card");
 
     if (!card) {
 
@@ -1207,6 +1220,15 @@ async function baixarCard() {
     card.classList.add("exportando");
 
     try {
+
+        // Aguarda fontes e layout antes da captura.
+        if (document.fonts?.ready) {
+            await document.fonts.ready;
+        }
+
+        await new Promise(resolve => {
+            requestAnimationFrame(() => requestAnimationFrame(resolve));
+        });
 
         const canvas = await html2canvas(card, {
 
@@ -1246,7 +1268,7 @@ async function baixarCard() {
 
         link.remove();
 
-        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        setTimeout(() => URL.revokeObjectURL(url), 1500);
 
     } catch (erro) {
 
