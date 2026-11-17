@@ -1,7 +1,7 @@
 
 /* =====================================================
    DARK ROSES | DESIGN SYSTEM
-   Versão aprimorada
+   Gótico clássico | Cartão vertical
 ===================================================== */
 
 /* ===== 1. VARIÁVEIS GLOBAIS ===== */
@@ -55,10 +55,14 @@
     --shadow-soft: 0 8px 25px rgba(0, 0, 0, 0.25);
     --shadow-strong: 0 20px 60px rgba(0, 0, 0, 0.45);
 
-    /* Cartão */
-    --card-bg:
-        linear-gradient(145deg, #171114, #0b080a);
+    /* Fundo do cartão */
+    --card-bg: linear-gradient(145deg, #171114, #0b080a);
     --card-glow: rgba(165, 30, 53, 0.22);
+
+    /* Identidade ornamental do cartão */
+    --card-accent: #a51e35;
+    --card-accent-light: #d65a70;
+    --card-gold: #b99a70;
 }
 
 
@@ -76,12 +80,13 @@ body.dark {
     --glow: rgba(165, 30, 53, 0.22);
     --glow-strong: rgba(165, 30, 53, 0.42);
 
-    --card-bg:
-        linear-gradient(145deg, #1c1015, #090708);
-
+    --card-bg: linear-gradient(145deg, #1c1015, #090708);
     --card-glow: rgba(165, 30, 53, 0.24);
-}
 
+    --card-accent: #a51e35;
+    --card-accent-light: #d65a70;
+    --card-gold: #b99a70;
+}
 
 body.blood {
     --bg: #100304;
@@ -93,12 +98,13 @@ body.blood {
     --glow: rgba(215, 25, 53, 0.28);
     --glow-strong: rgba(215, 25, 53, 0.55);
 
-    --card-bg:
-        linear-gradient(145deg, #30070d, #100304);
-
+    --card-bg: linear-gradient(145deg, #30070d, #100304);
     --card-glow: rgba(215, 25, 53, 0.35);
-}
 
+    --card-accent: #d71935;
+    --card-accent-light: #ff6478;
+    --card-gold: #d4a0a0;
+}
 
 body.midnight {
     --bg: #080d19;
@@ -110,10 +116,12 @@ body.midnight {
     --glow: rgba(71, 127, 224, 0.24);
     --glow-strong: rgba(71, 127, 224, 0.48);
 
-    --card-bg:
-        linear-gradient(145deg, #101b35, #080d19);
-
+    --card-bg: linear-gradient(145deg, #101b35, #080d19);
     --card-glow: rgba(71, 127, 224, 0.3);
+
+    --card-accent: #477fe0;
+    --card-accent-light: #83aaff;
+    --card-gold: #a8bde5;
 }
 
 
@@ -139,26 +147,13 @@ body {
     padding: 30px 18px;
 
     background:
-        radial-gradient(
-            ellipse at 15% 5%,
-            var(--glow),
-            transparent 42%
-        ),
-        radial-gradient(
-            ellipse at 90% 85%,
-            var(--glow),
-            transparent 38%
-        ),
+        radial-gradient(ellipse at 15% 5%, var(--glow), transparent 42%),
+        radial-gradient(ellipse at 90% 85%, var(--glow), transparent 38%),
         var(--bg);
 
     color: var(--text);
 
-    font-family:
-        "Segoe UI",
-        system-ui,
-        -apple-system,
-        sans-serif;
-
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
     line-height: 1.6;
 
     transition:
@@ -220,12 +215,7 @@ button {
     height: 1px;
 
     background:
-        linear-gradient(
-            90deg,
-            transparent,
-            var(--primary),
-            transparent
-        );
+        linear-gradient(90deg, transparent, var(--primary), transparent);
 
     opacity: 0.65;
 }
@@ -245,7 +235,6 @@ button {
 
     font-size: clamp(23px, 5vw, 30px);
     font-weight: 650;
-
     letter-spacing: 1px;
 
     text-shadow:
@@ -255,7 +244,6 @@ button {
 
 .descricao {
     max-width: 480px;
-
     margin: auto;
 
     color: var(--text-secondary);
@@ -282,7 +270,6 @@ button {
 
 .temas button {
     min-width: 100px;
-
     padding: 9px 18px;
 
     background: var(--surface-hover);
@@ -300,7 +287,6 @@ button {
 
 .temas button:hover {
     color: var(--text);
-
     border-color: var(--primary);
 
     background: rgba(var(--primary-rgb), 0.12);
@@ -336,16 +322,11 @@ button {
     height: 100%;
 
     background:
-        linear-gradient(
-            90deg,
-            var(--primary),
-            var(--primary-light)
-        );
+        linear-gradient(90deg, var(--primary), var(--primary-light));
 
     border-radius: inherit;
 
-    box-shadow:
-        0 0 12px var(--glow-strong);
+    box-shadow: 0 0 12px var(--glow-strong);
 
     transition: width 0.45s ease;
 }
@@ -380,7 +361,6 @@ legend {
 
     font-size: 14px;
     font-weight: 650;
-
     letter-spacing: 0.5px;
 }
 
@@ -442,7 +422,6 @@ input:not([type="checkbox"]):not([type="radio"]) {
     min-width: 0;
 
     margin: 0;
-
     padding: 13px 14px;
 
     background: rgba(255, 255, 255, 0.035);
@@ -453,7 +432,6 @@ input:not([type="checkbox"]):not([type="radio"]) {
     outline: none;
 
     color: var(--text);
-
     font-size: 14px;
 
     transition:
@@ -482,8 +460,6 @@ input:not([type="checkbox"]):not([type="radio"]):focus {
         0 0 18px var(--glow);
 }
 
-/* Campo inválido após validação */
-
 input:not([type="checkbox"]):not([type="radio"]):user-invalid {
     border-color: #c94c5c;
 }
@@ -499,7 +475,6 @@ input:not([type="checkbox"]):not([type="radio"]):user-invalid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
 
     gap: 12px;
-
     margin: 12px 0;
 }
 
@@ -532,7 +507,6 @@ input:not([type="checkbox"]):not([type="radio"]):user-invalid {
 
 .checkbox-group:hover {
     border-color: rgba(var(--primary-rgb), 0.35);
-
     box-shadow: 0 0 18px var(--glow);
 }
 
@@ -588,11 +562,9 @@ input[type="checkbox"] {
     height: 17px;
 
     margin: 0;
-
     flex-shrink: 0;
 
     accent-color: var(--primary);
-
     cursor: pointer;
 }
 
@@ -658,7 +630,6 @@ input[type="checkbox"] {
     height: 18px;
 
     margin: 0;
-
     flex-shrink: 0;
 
     border: 2px solid rgba(255, 255, 255, 0.3);
@@ -678,7 +649,6 @@ input[type="checkbox"] {
     background: var(--primary-light);
 
     transform: scale(0);
-
     transition: transform 0.2s ease;
 }
 
@@ -716,11 +686,7 @@ button {
     padding: 11px 18px;
 
     background:
-        linear-gradient(
-            135deg,
-            var(--primary),
-            #17080c
-        );
+        linear-gradient(135deg, var(--primary), #17080c);
 
     border: 1px solid rgba(255, 255, 255, 0.09);
     border-radius: var(--radius);
@@ -731,7 +697,6 @@ button {
     font-weight: 600;
 
     cursor: pointer;
-
     overflow: hidden;
 
     transition:
@@ -743,8 +708,7 @@ button {
 button:hover {
     transform: translateY(-2px);
 
-    box-shadow:
-        0 6px 20px var(--glow-strong);
+    box-shadow: 0 6px 20px var(--glow-strong);
 }
 
 button:active {
@@ -764,8 +728,6 @@ button:focus-visible {
     outline-offset: 4px;
 }
 
-/* Efeito de luz */
-
 button::after {
     content: "";
 
@@ -781,7 +743,6 @@ button::after {
         );
 
     transform: translateX(-110%);
-
     transition: transform 0.65s ease;
 
     pointer-events: none;
@@ -830,7 +791,6 @@ button:hover::after {
     color: var(--text);
 
     line-height: 1.8;
-
     white-space: pre-wrap;
 
     box-shadow: var(--shadow-soft);
@@ -840,190 +800,535 @@ button:hover::after {
 
 
 /* =====================================================
-   17. CARTÃO GERADO
+   17. CARTÃO GÓTICO | DARK ROSES
 ===================================================== */
 
 #cardContainer {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
     width: 100%;
+    padding: 28px 12px;
 }
 
-.card {
+.dr-card {
+    --dr-accent: var(--card-accent);
+    --dr-accent-light: var(--card-accent-light);
+    --dr-gold: var(--card-gold);
+
     position: relative;
 
-    margin-top: 30px;
-    padding: 30px;
+    isolation: isolate;
 
-    background: var(--card-bg);
+    display: flex;
+    flex-direction: column;
 
-    border: 1px solid var(--border-strong);
-    border-radius: var(--radius-xl);
+    width: 100%;
+    max-width: 440px;
+    min-height: 740px;
 
-    overflow: hidden;
-
-    box-shadow:
-        0 15px 45px rgba(0, 0, 0, 0.45),
-        0 0 35px var(--card-glow);
-
-    backdrop-filter: blur(12px);
-}
-
-/* Brilho superior */
-
-.card::before {
-    content: "";
-
-    position: absolute;
-    top: 0;
-    left: 10%;
-
-    width: 80%;
-    height: 2px;
+    padding: 40px 34px 28px;
 
     background:
-        linear-gradient(
-            90deg,
-            transparent,
-            var(--primary),
-            transparent
-        );
+        radial-gradient(
+            ellipse at 50% 0%,
+            rgba(var(--primary-rgb), 0.17),
+            transparent 48%
+        ),
+        radial-gradient(
+            ellipse at 50% 100%,
+            rgba(0, 0, 0, 0.65),
+            transparent 60%
+        ),
+        var(--card-bg);
 
-    opacity: 0.8;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 5px;
+
+    color: #eee6e2;
+
+    box-shadow:
+        0 20px 55px rgba(0, 0, 0, 0.55),
+        0 0 35px var(--card-glow);
+
+    overflow: hidden;
 }
 
-/* Detalhe decorativo */
+/* Textura do papel */
 
-.card::after {
+.dr-card::before {
     content: "";
 
     position: absolute;
     inset: 0;
 
-    border-radius: inherit;
+    z-index: -1;
 
-    border: 1px solid rgba(var(--primary-rgb), 0.13);
+    background:
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 3px,
+            rgba(255, 255, 255, 0.012) 4px
+        ),
+        repeating-linear-gradient(
+            90deg,
+            transparent,
+            transparent 5px,
+            rgba(0, 0, 0, 0.06) 6px
+        );
+
+    opacity: 0.7;
 
     pointer-events: none;
 }
 
-.card h3 {
-    margin: 8px 0;
+/* Moldura interna */
 
-    color: var(--text);
+.dr-card::after {
+    content: "";
 
-    font-size: 25px;
-    font-weight: 650;
+    position: absolute;
+    inset: 12px;
 
-    letter-spacing: 1px;
+    z-index: -1;
+
+    border: 1px solid rgba(185, 154, 112, 0.42);
+
+    pointer-events: none;
+}
+
+/* Cantos ornamentais */
+
+.dr-corner {
+    position: absolute;
+
+    color: var(--dr-gold);
+
+    font-family: Georgia, serif;
+    font-size: 32px;
+    line-height: 1;
+
+    opacity: 0.8;
+
+    pointer-events: none;
+}
+
+.dr-corner--tl {
+    top: 17px;
+    left: 19px;
+}
+
+.dr-corner--tr {
+    top: 17px;
+    right: 19px;
+    transform: scaleX(-1);
+}
+
+.dr-corner--bl {
+    bottom: 17px;
+    left: 19px;
+    transform: scaleY(-1);
+}
+
+.dr-corner--br {
+    bottom: 17px;
+    right: 19px;
+    transform: scale(-1);
+}
+
+
+/* =====================================================
+   18. CABEÇALHO DO CARTÃO
+===================================================== */
+
+.dr-header {
+    position: relative;
 
     text-align: center;
 
-    text-shadow: 0 0 18px var(--glow);
+    margin-bottom: 25px;
 }
 
-.card .sub {
-    margin-bottom: 25px;
+.dr-rose {
+    display: block;
 
-    color: var(--text-muted);
+    margin-bottom: 9px;
 
+    color: var(--dr-accent-light);
+
+    font-size: 36px;
+
+    filter: drop-shadow(0 0 12px var(--card-glow));
+}
+
+.dr-brand {
+    margin: 0;
+
+    color: #f0e5df;
+
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 25px;
+    font-weight: 500;
+
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+.dr-subtitle {
+    margin: 8px 0 0;
+
+    color: var(--dr-gold);
+
+    font-family: Georgia, serif;
+    font-size: 9px;
+
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+
+/* =====================================================
+   19. DIVISÓRIAS ORNAMENTAIS
+===================================================== */
+
+.dr-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 12px;
+
+    margin: 18px 0;
+}
+
+.dr-divider::before,
+.dr-divider::after {
+    content: "";
+
+    flex: 1;
+
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--dr-gold),
+            transparent
+        );
+
+    opacity: 0.7;
+}
+
+.dr-divider span {
+    color: var(--dr-gold);
+
+    font-family: Georgia, serif;
+    font-size: 15px;
+}
+
+
+/* =====================================================
+   20. IDENTIDADE DO PARTICIPANTE
+===================================================== */
+
+.dr-identity {
+    text-align: center;
+
+    margin: 12px 0 18px;
+}
+
+.dr-name {
+    margin: 0;
+
+    color: #f4e9e4;
+
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 27px;
+    font-weight: 500;
+
+    line-height: 1.3;
+
+    overflow-wrap: anywhere;
+}
+
+.dr-date {
+    margin-top: 8px;
+
+    color: #a99a93;
+
+    font-family: Georgia, serif;
     font-size: 11px;
+
+    letter-spacing: 1.5px;
+}
+
+
+/* =====================================================
+   21. SELO DE AUTENTICIDADE
+===================================================== */
+
+.dr-seal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 12px;
+
+    width: fit-content;
+    max-width: 100%;
+
+    margin: 12px auto 22px;
+    padding: 10px 17px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(var(--primary-rgb), 0.22),
+            rgba(0, 0, 0, 0.3)
+        );
+
+    border: 1px solid rgba(185, 154, 112, 0.5);
+    border-radius: 3px;
+
+    box-shadow:
+        inset 0 0 12px rgba(0, 0, 0, 0.3),
+        0 0 15px var(--card-glow);
+}
+
+.dr-seal-symbol {
+    color: var(--dr-gold);
+    font-size: 21px;
+}
+
+.dr-seal-text {
+    color: #e7d9ce;
+
+    font-family: Georgia, serif;
+    font-size: 9px;
+
     letter-spacing: 2px;
+    line-height: 1.6;
 
     text-align: center;
     text-transform: uppercase;
 }
 
-.card .info {
+
+/* =====================================================
+   22. SEÇÕES E INFORMAÇÕES
+===================================================== */
+
+.dr-section {
+    margin-bottom: 17px;
+}
+
+.dr-section-title {
+    display: flex;
+    align-items: center;
+
+    gap: 9px;
+
+    margin: 0 0 8px;
+
+    color: var(--dr-gold);
+
+    font-family: Georgia, serif;
+    font-size: 11px;
+    font-weight: 500;
+
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.dr-section-title::after {
+    content: "";
+
+    flex: 1;
+
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(185, 154, 112, 0.55),
+            transparent
+        );
+}
+
+.dr-info {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
 
-    gap: 15px;
+    gap: 12px;
 
-    padding: 11px 0;
+    padding: 8px 0;
 
-    border-bottom: 1px solid var(--border);
-
-    font-size: 13px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
 }
 
-.card .info span {
+.dr-info-label {
     flex-shrink: 0;
 
-    color: var(--text-muted);
+    color: #a99a93;
+
+    font-family: Georgia, serif;
+    font-size: 11px;
 }
 
-.card .info strong {
-    max-width: 65%;
+.dr-info-value {
+    max-width: 68%;
 
-    color: var(--text);
+    color: #eee6e2;
 
+    font-size: 12px;
     text-align: right;
 
     overflow-wrap: anywhere;
     word-break: break-word;
 }
 
-.card .id {
-    margin-top: 14px;
+.dr-info-value a {
+    color: var(--dr-accent-light);
 
-    color: var(--text-muted);
-
-    font-size: 11px;
-
-    text-align: right;
+    text-decoration: underline;
+    text-underline-offset: 3px;
 }
 
-.card .footer {
-    margin-top: 25px;
 
-    color: var(--text-muted);
+/* =====================================================
+   23. ESTATÍSTICAS
+===================================================== */
 
-    font-size: 11px;
+.dr-stats {
+    display: grid;
+
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    gap: 8px;
+
+    margin: 15px 0;
+}
+
+.dr-stat {
+    padding: 12px 5px;
+
+    background: rgba(255, 255, 255, 0.025);
+
+    border: 1px solid rgba(185, 154, 112, 0.2);
+    border-radius: 3px;
 
     text-align: center;
 }
 
+.dr-stat-value {
+    display: block;
 
-/* =====================================================
-   18. SELO DO CARTÃO
-===================================================== */
+    color: var(--dr-accent-light);
 
-.selo {
-    position: absolute;
-    top: 14px;
-    right: 14px;
+    font-family: Georgia, serif;
+    font-size: 21px;
+}
 
-    padding: 6px 12px;
+.dr-stat-label {
+    display: block;
 
-    background:
-        linear-gradient(
-            135deg,
-            var(--primary),
-            #16070b
-        );
+    margin-top: 4px;
 
-    border: 1px solid var(--border);
-    border-radius: 30px;
+    color: #a99a93;
 
-    color: #fff;
-
-    font-size: 10px;
-    font-weight: 700;
+    font-size: 8px;
 
     letter-spacing: 1px;
-
-    box-shadow: 0 0 12px var(--glow);
+    text-transform: uppercase;
 }
 
 
 /* =====================================================
-   19. BOTÃO DE DOWNLOAD
+   24. RODAPÉ DO CARTÃO
+===================================================== */
+
+.dr-footer {
+    margin-top: auto;
+    padding-top: 22px;
+
+    text-align: center;
+}
+
+.dr-footer-message {
+    color: #b7a69d;
+
+    font-family: Georgia, serif;
+    font-size: 11px;
+
+    font-style: italic;
+    letter-spacing: 0.5px;
+}
+
+.dr-id {
+    display: inline-block;
+
+    margin-top: 14px;
+    padding: 6px 12px;
+
+    background: rgba(0, 0, 0, 0.25);
+
+    border: 1px solid rgba(185, 154, 112, 0.3);
+
+    color: var(--dr-gold);
+
+    font-family: monospace;
+    font-size: 9px;
+
+    letter-spacing: 2px;
+}
+
+.dr-footer-brand {
+    margin-top: 12px;
+
+    color: rgba(185, 154, 112, 0.55);
+
+    font-family: Georgia, serif;
+    font-size: 8px;
+
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+
+/* =====================================================
+   25. EXPORTAÇÃO DO CARTÃO
+===================================================== */
+
+.dr-card.exportando {
+    width: 440px;
+    max-width: none;
+    min-height: 740px;
+
+    margin: 0;
+    border-radius: 5px;
+}
+
+/* Centralização e espaço do cartão */
+
+#cardContainer[hidden],
+#baixarCardBtn[hidden] {
+    display: none !important;
+}
+
+
+/* =====================================================
+   26. BOTÃO DE DOWNLOAD
 ===================================================== */
 
 #baixarCardBtn {
     display: block;
 
     width: 100%;
+    max-width: 440px;
 
     margin: 18px auto 0;
     padding: 14px;
@@ -1035,12 +1340,14 @@ button:hover::after {
             var(--primary)
         );
 
+    border: 1px solid rgba(255, 255, 255, 0.12);
+
     font-size: 14px;
 }
 
 
 /* =====================================================
-   20. ACESSIBILIDADE
+   27. ACESSIBILIDADE
 ===================================================== */
 
 :focus-visible {
@@ -1061,7 +1368,7 @@ input[type="radio"]:focus-visible {
 
 
 /* =====================================================
-   21. ANIMAÇÕES
+   28. ANIMAÇÕES
 ===================================================== */
 
 @keyframes fadeIn {
@@ -1088,7 +1395,7 @@ input[type="radio"]:focus-visible {
 
 
 /* =====================================================
-   22. RESPONSIVIDADE
+   29. RESPONSIVIDADE
 ===================================================== */
 
 @media (max-width: 768px) {
@@ -1145,7 +1452,6 @@ input[type="radio"]:focus-visible {
     .radio-group label {
         flex: 1;
         min-width: 100px;
-
         padding: 12px;
     }
 
@@ -1169,29 +1475,23 @@ input[type="radio"]:focus-visible {
         padding: 15px;
     }
 
-    .card {
-        padding: 24px 17px;
-    }
-
-    .card .info {
-        flex-direction: column;
-        gap: 5px;
-    }
-
-    .card .info strong {
-        max-width: 100%;
-        text-align: left;
-    }
-
     #resultado {
         padding: 17px;
         font-size: 13px;
+    }
+
+    .dr-card {
+        padding: 35px 27px 25px;
+    }
+
+    .dr-name {
+        font-size: 24px;
     }
 }
 
 
 /* =====================================================
-   23. TELAS PEQUENAS
+   30. TELAS PEQUENAS
 ===================================================== */
 
 @media (max-width: 380px) {
@@ -1216,11 +1516,33 @@ input[type="radio"]:focus-visible {
     .radio-group span {
         font-size: 13px;
     }
+
+    .dr-card {
+        padding: 33px 23px 24px;
+    }
+
+    .dr-brand {
+        font-size: 21px;
+        letter-spacing: 2px;
+    }
+
+    .dr-name {
+        font-size: 21px;
+    }
+
+    .dr-info {
+        gap: 8px;
+    }
+
+    .dr-info-label,
+    .dr-info-value {
+        font-size: 10px;
+    }
 }
 
 
 /* =====================================================
-   24. MOVIMENTO REDUZIDO
+   31. MOVIMENTO REDUZIDO
 ===================================================== */
 
 @media (prefers-reduced-motion: reduce) {
