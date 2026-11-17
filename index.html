@@ -1,10 +1,16 @@
+
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dark Roses Form</title>
+
+    <meta name="theme-color" content="#171216">
+    <meta name="description" content="Dark Roses: formulário de cadastro de obras literárias.">
+
+    <title>Dark Roses | Ficha Literária</title>
+
     <link rel="stylesheet" href="style.css">
     <link rel="shortcut icon" href="./favicon/favicon.ico" type="image/x-icon">
 </head>
@@ -13,140 +19,423 @@
 
     <main class="form-container">
 
-        <header>
-            <h2>🌹 Dark Roses - Ficha 🌫️</h2>
+        <!-- CABEÇALHO -->
+        <header class="cabecalho">
+            <h1>🌹 Dark Roses - Ficha 🌫️</h1>
+
             <p class="descricao">
                 Preencha as informações abaixo para gerar sua ficha corretamente.
                 Leva menos de 2 minutos ✨
             </p>
         </header>
 
-        <!-- TEMAS -->
-        <section class="temas">
-            <button type="button" onclick="setTema('dark')">Dark</button>
-            <button type="button" onclick="setTema('blood')">Blood</button>
-            <button type="button" onclick="setTema('midnight')">Midnight</button>
-        </section>
+        <!-- SELEÇÃO DE TEMA -->
+        <nav class="temas" aria-label="Selecionar tema visual">
+            <button type="button" onclick="setTema('dark')" aria-label="Tema Dark">
+                Dark
+            </button>
+
+            <button type="button" onclick="setTema('blood')" aria-label="Tema Blood">
+                Blood
+            </button>
+
+            <button type="button" onclick="setTema('midnight')" aria-label="Tema Midnight">
+                Midnight
+            </button>
+        </nav>
 
         <!-- PROGRESSO -->
-        <div id="barra">
-            <div id="progresso"></div>
-        </div>
+        <section class="progresso-container" aria-label="Progresso do formulário">
+            <div id="barra" role="progressbar"
+                 aria-label="Progresso de preenchimento"
+                 aria-valuemin="0"
+                 aria-valuemax="100"
+                 aria-valuenow="0">
 
-        <!-- FORM -->
+                <div id="progresso"></div>
+            </div>
+        </section>
+
+        <!-- FORMULÁRIO -->
         <form id="formFicha">
 
             <!-- IDENTIDADE -->
             <fieldset>
                 <legend>🌹 Identidade</legend>
 
-                <label for="nome">Nome ou pseudônimo</label>
-                <input id="nome" type="text" placeholder="Nome completo ou pseudônimo (Ex: Byanca Matos)" required>
-                <small>Esse será o nome exibido na ficha</small>
+                <div class="campo">
+                    <label for="nome">Nome ou pseudônimo</label>
 
-                <label for="data">Data de nascimento</label>
-                <input  id="data" 
+                    <input
+                        type="text"
+                        id="nome"
+                        name="nome"
+                        placeholder="Ex: Byanca Matos"
+                        autocomplete="name"
+                        maxlength="80"
+                        required
+                    >
+
+                    <small>Esse será o nome exibido na ficha.</small>
+                </div>
+
+                <div class="campo">
+                    <label for="data">Data de nascimento</label>
+
+                    <input
+                        type="text"
+                        id="data"
+                        name="data"
                         placeholder="Ex: 12/03/2002"
+                        inputmode="numeric"
+                        maxlength="10"
                         pattern="^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$"
-                        title="Use o formato dd/mm/aaaa (Ex: 12/03/2002)" required>
+                        title="Utilize o formato dd/mm/aaaa."
+                        autocomplete="bday"
+                        required
+                    >
+
+                    <small>Formato: dia/mês/ano.</small>
+                </div>
             </fieldset>
 
             <!-- OBRA -->
             <fieldset>
                 <legend>📖 Sobre a Obra</legend>
 
-                <label for="titulo">Título do livro</label>
-                <input id="titulo" placeholder="Ex: O Pacto Celestial" required>
+                <div class="campo">
+                    <label for="titulo">Título do livro</label>
 
-                <label for="user">Usuário no Wattpad</label>
-                <input id="user" placeholder="Ex: @byanca_writes" required>
+                    <input
+                        type="text"
+                        id="titulo"
+                        name="titulo"
+                        placeholder="Ex: O Pacto Celestial"
+                        maxlength="150"
+                        required
+                    >
+                </div>
 
-                <label for="genero">Gênero literário</label>
-                <input id="genero" placeholder="Ex: Fantasia, Romance, Terror" required>
+                <div class="campo">
+                    <label for="user">Usuário no Wattpad</label>
+
+                    <input
+                        type="text"
+                        id="user"
+                        name="user"
+                        placeholder="Ex: @byanca_writes"
+                        maxlength="50"
+                        required
+                    >
+
+                    <small>Informe seu nome de usuário na plataforma.</small>
+                </div>
+
+                <div class="campo">
+                    <label for="genero">Gênero literário</label>
+
+                    <input
+                        type="text"
+                        id="genero"
+                        name="genero"
+                        placeholder="Ex: Fantasia, Romance, Terror"
+                        maxlength="150"
+                        required
+                    >
+                </div>
             </fieldset>
 
-            <!-- CONTEÚDO -->
+            <!-- CONTEÚDO SENSÍVEL -->
             <fieldset>
                 <legend>🔥 Conteúdo Sensível</legend>
 
                 <div class="checkbox-group">
-                    <strong>Contém conteúdo +18?  (Se sim, especifique: tortura, suicídio, abuso, drogas, etc.)</strong>
-                    <small>Marque tudo que se aplica</small>
 
-                    <label><input type="checkbox" value="Tortura"> Tortura</label>
-                    <label><input type="checkbox" value="Abuso"> Abuso</label>
-                    <label><input type="checkbox" value="Suicídio"> Suicídio</label>
-                    <label><input type="checkbox" value="Drogas"> Drogas</label>
-                    <label><input type="checkbox" value="Violência"> Violência</label>
-                    <label><input type="checkbox" id="outroCheck" value="Outro"> Outro</label>
-                    <input 
-                      type="text" 
-                      id="outroTexto" 
-                      placeholder="Descreva o conteúdo +18..." 
-                      style="display:none; margin-top:8px;"
-                    >
+                    <strong> Sua obra possui conteúdo sensível?</strong>
+
+                    <small>
+                        Marque todas as categorias que aparecem na obra.
+                        Caso não possua nenhuma, selecione "Nenhum".
+                    </small>
+
+                    <div class="opcoes-conteudo">
+
+                        <label>
+                            <input
+                                type="checkbox"
+                                id="nenhumConteudo"
+                                name="conteudo"
+                                value="Nenhum"
+                            >
+                            Nenhum
+                        </label>
+
+                        <label>
+                            <input type="checkbox" name="conteudo" value="Tortura">
+                            Tortura
+                        </label>
+
+                        <label>
+                            <input type="checkbox" name="conteudo" value="Abuso">
+                            Abuso
+                        </label>
+
+                        <label>
+                            <input type="checkbox" name="conteudo" value="Suicídio">
+                            Suicídio
+                        </label>
+
+                        <label>
+                            <input type="checkbox" name="conteudo" value="Drogas">
+                            Drogas
+                        </label>
+
+                        <label>
+                            <input type="checkbox" name="conteudo" value="Violência">
+                            Violência
+                        </label>
+
+                        <label>
+                            <input
+                                type="checkbox"
+                                id="outroCheck"
+                                name="conteudo"
+                                value="Outro"
+                            >
+                            Outro
+                        </label>
+
+                    </div>
+
+                    <div class="campo" id="outroContainer" hidden>
+                        <label for="outroTexto">Especifique o outro conteúdo</label>
+
+                        <input
+                            type="text"
+                            id="outroTexto"
+                            name="outroTexto"
+                            placeholder="Descreva o conteúdo sensível..."
+                            maxlength="200"
+                        >
+                    </div>
+
                 </div>
 
-                <label for="gatilhos">Você possui gatilhos ou desconfortos ao ler conteúdo +18? (Se sim, quais?)</label>
-                <input id="gatilhos" placeholder="Ex: Evito conteúdo sobre suicídio">
+                <div class="campo">
+                    <label for="gatilhos">
+                        Você possui gatilhos ou desconfortos ao ler conteúdo sensível?
+                    </label>
+
+                    <input
+                        type="text"
+                        id="gatilhos"
+                        name="gatilhos"
+                        placeholder="Ex: Evito conteúdo sobre suicídio"
+                        maxlength="300"
+                    >
+
+                    <small>
+                        Informe os temas que prefere evitar durante as leituras.
+                    </small>
+                </div>
             </fieldset>
 
             <!-- PARTICIPAÇÃO -->
             <fieldset>
                 <legend>💬 Participação</legend>
 
-                <label for="feedback">Deseja participar de feedbacks? (Feedbacks são mútuos; não é possível apenas receber)</label>
-                <div class="radio-group">
-                    <label>
-                        <input type="radio" name="feedback" value="Sim" required>
-                        <span>Sim</span>
-                    </label>
-            
-                    <label>
-                        <input type="radio" name="feedback" value="Não">
-                        <span>Não</span>
-                    </label>
+                <div class="campo">
+                    <span class="pergunta">
+                        Deseja participar dos feedbacks?
+                    </span>
+
+                    <small>
+                        A participação é mútua. Não é possível apenas receber
+                        feedbacks sem também oferecer.
+                    </small>
+
+                    <div class="radio-group">
+
+                        <label>
+                            <input
+                                type="radio"
+                                name="feedback"
+                                value="Sim"
+                                required
+                            >
+                            <span>Sim</span>
+                        </label>
+
+                        <label>
+                            <input
+                                type="radio"
+                                name="feedback"
+                                value="Não"
+                            >
+                            <span>Não</span>
+                        </label>
+
+                    </div>
                 </div>
 
-                <label for="capEspeciais">Possui capítulos especiais? (Capítulos curtos com menos de 300 palavras)</label>
-                <input id="capEspeciais" placeholder="Ex: Capitulo 1, Capitulo 10" required>
+                <div class="campo">
+                    <span class="pergunta">
+                        Sua obra possui capítulos especiais?
+                    </span>
+
+                    <small>
+                        Consideramos especiais os capítulos curtos,
+                        com menos de 300 palavras.
+                    </small>
+
+                    <div class="radio-group">
+
+                        <label>
+                            <input
+                                type="radio"
+                                name="possuiEspeciais"
+                                value="Sim"
+                                required
+                            >
+                            <span>Sim</span>
+                        </label>
+
+                        <label>
+                            <input
+                                type="radio"
+                                name="possuiEspeciais"
+                                value="Não"
+                            >
+                            <span>Não</span>
+                        </label>
+
+                    </div>
+
+                    <div class="campo" id="capEspeciaisContainer" hidden>
+                        <label for="capEspeciais">
+                            Quais são os capítulos especiais?
+                        </label>
+
+                        <input
+                            type="text"
+                            id="capEspeciais"
+                            name="capEspeciais"
+                            placeholder="Ex: Capítulo 1, Capítulo 10"
+                            maxlength="200"
+                        >
+                    </div>
+                </div>
             </fieldset>
 
-            <!-- DETALHES -->
+            <!-- DETALHES TÉCNICOS -->
             <fieldset>
                 <legend>🔢 Detalhes Técnicos</legend>
 
-                <label>🔢 Quantidade de palavras</label>
+                <div class="campo">
+                    <span class="pergunta">Quantidade de palavras</span>
 
-                <div class="grupo-palavras">
-                    <input id="maior" type="number" min="1" placeholder="Maior capítulo (Ex: 2844)" required>
-                    <input id="menor" type="number" min="1" placeholder="Menor capítulo (Ex: 784)" required>
+                    <small>
+                        Informe a quantidade de palavras do maior e do menor
+                        capítulo da obra.
+                    </small>
+
+                    <div class="grupo-palavras">
+
+                        <div>
+                            <label for="maior">Maior capítulo</label>
+
+                            <input
+                                type="number"
+                                id="maior"
+                                name="maior"
+                                min="1"
+                                step="1"
+                                placeholder="Ex: 2844"
+                                required
+                            >
+                        </div>
+
+                        <div>
+                            <label for="menor">Menor capítulo</label>
+
+                            <input
+                                type="number"
+                                id="menor"
+                                name="menor"
+                                min="1"
+                                step="1"
+                                placeholder="Ex: 784"
+                                required
+                            >
+                        </div>
+
+                    </div>
+
+                    <small>
+                        A média estimada será calculada automaticamente
+                        com base nos valores informados.
+                    </small>
                 </div>
-                
-                <small>A média será calculada automaticamente com base nos valores acima.</small>
 
-                <label for="link">Link da obra</label>
-                <input id="link" placeholder="https://www.wattpad.com/..." required>
+                <div class="campo">
+                    <label for="link">Link da obra</label>
+
+                    <input
+                        type="url"
+                        id="link"
+                        name="link"
+                        placeholder="https://www.wattpad.com/..."
+                        maxlength="500"
+                        required
+                    >
+
+                    <small>Insira o endereço completo da sua obra.</small>
+                </div>
             </fieldset>
 
             <!-- AÇÕES -->
             <section class="acoes">
-                <button type="button" onclick="gerar()">Gerar Ficha</button>
+                <button type="button" onclick="
+                    const form = document.getElementById('formFicha');
+                    if (form.reportValidity()) gerar();
+                ">
+                    🌹 Gerar Ficha
+                </button>
             </section>
 
         </form>
 
         <!-- RESULTADO -->
-        <section id="resultado"></section>
+        <section
+            id="resultado"
+            aria-live="polite"
+            aria-atomic="true"
+        ></section>
 
-        <div id="cardContainer"></div>
-        <button onclick="baixarCard()">📸 Baixar cartão</button>
+        <!-- CARTÃO GERADO -->
+        <section id="cardContainer" aria-label="Cartão da ficha gerada" hidden>
+        </section>
+
+        <!-- DOWNLOAD -->
+        <button
+            type="button"
+            id="baixarCardBtn"
+            onclick="baixarCard()"
+            hidden
+        >
+            📸 Baixar cartão
+        </button>
 
     </main>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="script.js"></script>
+    <!-- BIBLIOTECA DE CAPTURA -->
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
+        defer
+    ></script>
+
+    <!-- SCRIPT PRINCIPAL -->
+    <script src="script.js" defer></script>
 
 </body>
-
 </html>
