@@ -1,392 +1,850 @@
-// ===== ELEMENTOS =====
-const el = {
-  nome: document.getElementById("nome"),
-  data: document.getElementById("data"),
-  titulo: document.getElementById("titulo"),
-  user: document.getElementById("user"),
-  genero: document.getElementById("genero"),
-  gatilhos: document.getElementById("gatilhos"),
-  capEspeciais: document.getElementById("capEspeciais"),
-  link: document.getElementById("link"),
-  maior: document.getElementById("maior"),
-  menor: document.getElementById("menor"),
-  progresso: document.getElementById("progresso"),
-  outroCheck: document.getElementById("outroCheck"),
-  outroTexto: document.getElementById("outroTexto"),
-  resultado: document.getElementById("resultado"),
-  cardContainer: document.getElementById("cardContainer"),
+
+/* =====================================================
+   DARK ROSES | SISTEMA PRINCIPAL
+   Versão aprimorada
+===================================================== */
+
+
+/* =====================================================
+   1. CONFIGURAÇÕES
+===================================================== */
+
+const CONFIG = {
+    apiUrl: "https://armazenador-de-fichas-two.vercel.app/api/fichas",
+    cardFileName: "dark-roses-card.png",
+    exportScale: 3,
+    temas: ["dark", "blood", "midnight"]
 };
 
-function getFeedback() {
-  const selecionado = document.querySelector('input[name="feedback"]:checked');
-  return selecionado ? selecionado.value : "-";
+
+/* =====================================================
+   2. ELEMENTOS DO DOM
+===================================================== */
+
+const el = {
+    form: document.getElementById("formFicha"),
+
+    nome: document.getElementById("nome"),
+    data: document.getElementById("data"),
+    titulo: document.getElementById("titulo"),
+    user: document.getElementById("user"),
+    genero: document.getElementById("genero"),
+    gatilhos: document.getElementById("gatilhos"),
+
+    capEspeciais: document.getElementById("capEspeciais"),
+    capEspeciaisContainer: document.getElementById("capEspeciaisContainer"),
+
+    link: document.getElementById("link"),
+
+    maior: document.getElementById("maior"),
+    menor: document.getElementById("menor"),
+
+    progresso: document.getElementById("progresso"),
+    barra: document.getElementById("barra"),
+
+    outroCheck: document.getElementById("outroCheck"),
+    outroTexto: document.getElementById("outroTexto"),
+    outroContainer: document.getElementById("outroContainer"),
+
+    nenhumConteudo: document.getElementById("nenhumConteudo"),
+
+    resultado: document.getElementById("resultado"),
+    cardContainer: document.getElementById("cardContainer"),
+    baixarCardBtn: document.getElementById("baixarCardBtn")
+};
+
+
+/* =====================================================
+   3. ESTADO
+===================================================== */
+
+const estado = {
+    gerando: false,
+    ultimoID: null
+};
+
+
+/* =====================================================
+   4. INICIALIZAÇÃO
+===================================================== */
+
+document.addEventListener("DOMContentLoaded", inicializar);
+
+function inicializar() {
+
+    configurarEventos();
+
+    configurarCamposCondicionais();
+
+    configurarTemaInicial();
+
+    atualizarBarra();
 }
 
-// apenas inputs relevantes para progresso
-const inputs = document.querySelectorAll("input[type='text'], input[type='date']");
 
-// ===== EVENTOS =====
-el.outroCheck.addEventListener("change", toggleOutro);
+/* =====================================================
+   5. EVENTOS
+===================================================== */
 
-// 🌫️ formatação automática da data
-el.data.addEventListener("blur", corrigirData);
+function configurarEventos() {
 
-inputs.forEach(input => {
-  input.addEventListener("input", atualizarBarra);
-});
+    // Data
+    el.data.addEventListener("input", formatarData);
+    el.data.addEventListener("blur", corrigirData);
 
-el.user.addEventListener("blur", () => {
-  if (el.user.value && !el.user.value.startsWith("@")) {
-    el.user.value = "@" + el.user.value;
-  }
-});
+    // Usuário Wattpad
+    el.user.addEventListener("blur", formatarUsuario);
 
-el.data.addEventListener("input", e => {
-  let v = e.target.value.replace(/\D/g, "");
+    // Conteúdo sensível
+    el.outroCheck.addEventListener("change", toggleOutro);
 
-  if (v.length > 2) v = v.slice(0,2) + "/" + v.slice(2);
-  if (v.length > 5) v = v.slice(0,5) + "/" + v.slice(5,9);
+    el.nenhumConteudo.addEventListener("change", controlarNenhum);
 
-  e.target.value = v;
-});
+    document.querySelectorAll(
+        '.checkbox-group input[type="checkbox"]:not(#nenhumConteudo)'
+    ).forEach(check => {
+        check.addEventListener("change", controlarCategorias);
+    });
 
-// ===== FUNÇÕES =====
+    // Capítulos especiais
+    document.querySelectorAll(
+        'input[name="possuiEspeciais"]'
+    ).forEach(radio => {
+        radio.addEventListener("change", toggleCapEspeciais);
+    });
 
-// 🌹 UI
+    // Progresso
+    el.form.querySelectorAll("input").forEach(input => {
+        input.addEventListener("input", atualizarBarra);
+        input.addEventListener("change", atualizarBarra);
+    });
+
+    // Valores técnicos
+    el.maior.addEventListener("input", validarOrdemPalavras);
+    el.menor.addEventListener("input", validarOrdemPalavras);
+
+    // Atualização do progresso após qualquer mudança
+    el.form.addEventListener("change", atualizarBarra);
+}
+
+
+/* =====================================================
+   6. CONFIGURAÇÃO INICIAL
+===================================================== */
+
+function configurarTemaInicial() {
+
+    const temaAtual = CONFIG.temas.find(
+        tema => document.body.classList.contains(tema)
+    );
+
+    if (!temaAtual) {
+        document.body.classList.add("dark");
+    }
+}
+
+
+function configurarCamposCondicionais() {
+
+    toggleOutro();
+
+    toggleCapEspeciais();
+}
+
+
+/* =====================================================
+   7. FORMATAÇÃO DE DADOS
+===================================================== */
+
+// Formata a data enquanto o usuário digita.
+
+function formatarData(event) {
+
+    let valor = event.target.value.replace(/\D/g, "").slice(0, 8);
+
+    if (valor.length > 4) {
+        valor = valor.replace(
+            /^(\d{2})(\d{2})(\d{1,4})$/,
+            "$1/$2/$3"
+        );
+    } else if (valor.length > 2) {
+        valor = valor.replace(
+            /^(\d{2})(\d{1,2})$/,
+            "$1/$2"
+        );
+    }
+
+    event.target.value = valor;
+}
+
+
+// Corrige formatos incompletos ao sair do campo.
+
+function corrigirData() {
+
+    const numeros = el.data.value.replace(/\D/g, "");
+
+    if (!numeros) return;
+
+    if (numeros.length === 8) {
+
+        const dia = numeros.slice(0, 2);
+        const mes = numeros.slice(2, 4);
+        const ano = numeros.slice(4, 8);
+
+        el.data.value = `${dia}/${mes}/${ano}`;
+
+    } else if (numeros.length === 7) {
+
+        const dia = numeros.slice(0, 1).padStart(2, "0");
+        const mes = numeros.slice(1, 3);
+        const ano = numeros.slice(3, 7);
+
+        el.data.value = `${dia}/${mes}/${ano}`;
+    }
+
+    atualizarBarra();
+}
+
+
+// Padroniza o usuário do Wattpad.
+
+function formatarUsuario() {
+
+    let usuario = el.user.value.trim();
+
+    if (!usuario) return;
+
+    usuario = usuario.replace(/^@+/, "");
+
+    el.user.value = `@${usuario}`;
+}
+
+
+/* =====================================================
+   8. CAMPOS CONDICIONAIS
+===================================================== */
+
+// Campo Outro.
+
 function toggleOutro() {
-  const ativo = el.outroCheck.checked;
 
-  el.outroTexto.style.display = ativo ? "block" : "none";
+    const ativo = el.outroCheck.checked;
 
-  if (ativo) {
-    el.outroTexto.focus();
-  } else {
-    el.outroTexto.value = "";
-  }
+    el.outroContainer.hidden = !ativo;
+
+    el.outroTexto.required = ativo;
+
+    if (ativo) {
+        el.outroTexto.focus();
+    } else {
+        el.outroTexto.value = "";
+    }
+
+    atualizarBarra();
 }
+
+
+// Opção Nenhum.
+
+function controlarNenhum() {
+
+    if (el.nenhumConteudo.checked) {
+
+        document.querySelectorAll(
+            '.checkbox-group input[type="checkbox"]:not(#nenhumConteudo)'
+        ).forEach(check => {
+            check.checked = false;
+        });
+
+        toggleOutro();
+    }
+
+    atualizarBarra();
+}
+
+
+// Impede que Nenhum seja selecionado junto com outras categorias.
+
+function controlarCategorias() {
+
+    if (this.checked) {
+        el.nenhumConteudo.checked = false;
+    }
+
+    if (this === el.outroCheck) {
+        toggleOutro();
+    }
+
+    atualizarBarra();
+}
+
+
+// Capítulos especiais.
+
+function toggleCapEspeciais() {
+
+    const selecionado = document.querySelector(
+        'input[name="possuiEspeciais"]:checked'
+    );
+
+    const possui = selecionado?.value === "Sim";
+
+    el.capEspeciaisContainer.hidden = !possui;
+
+    el.capEspeciais.required = possui;
+
+    if (!possui) {
+        el.capEspeciais.value = "";
+    }
+
+    atualizarBarra();
+}
+
+
+/* =====================================================
+   9. PROGRESSO
+===================================================== */
+
+function atualizarBarra() {
+
+    const camposObrigatorios = [
+        el.nome,
+        el.data,
+        el.titulo,
+        el.user,
+        el.genero,
+        el.maior,
+        el.menor,
+        el.link
+    ];
+
+    let total = camposObrigatorios.length;
+    let preenchidos = 0;
+
+    camposObrigatorios.forEach(campo => {
+
+        if (campo.value.trim() && campo.checkValidity()) {
+            preenchidos++;
+        }
+    });
+
+    // Feedback
+    total++;
+
+    if (getFeedback()) {
+        preenchidos++;
+    }
+
+    // Conteúdo sensível
+    total++;
+
+    if (document.querySelector(
+        '.checkbox-group input[type="checkbox"]:checked'
+    )) {
+        preenchidos++;
+    }
+
+    // Capítulos especiais
+    total++;
+
+    if (document.querySelector(
+        'input[name="possuiEspeciais"]:checked'
+    )) {
+        preenchidos++;
+    }
+
+    // Campo condicional: Outro
+    if (el.outroCheck.checked) {
+
+        total++;
+
+        if (el.outroTexto.value.trim()) {
+            preenchidos++;
+        }
+    }
+
+    // Campo condicional: capítulos especiais
+    const especiais = document.querySelector(
+        'input[name="possuiEspeciais"]:checked'
+    );
+
+    if (especiais?.value === "Sim") {
+
+        total++;
+
+        if (el.capEspeciais.value.trim()) {
+            preenchidos++;
+        }
+    }
+
+    const porcentagem = Math.round(
+        (preenchidos / total) * 100
+    );
+
+    el.progresso.style.width = `${porcentagem}%`;
+
+    el.barra.setAttribute(
+        "aria-valuenow",
+        porcentagem
+    );
+}
+
+
+/* =====================================================
+   10. UTILITÁRIOS
+===================================================== */
+
+function limparEspacosFinais(texto) {
+
+    return texto
+        .split("\n")
+        .map(linha => linha.trimEnd())
+        .join("\n")
+        .trim();
+}
+
 
 function validarNomeCompleto(nome) {
 
-  // remove espaços extras
-  nome = nome.trim().replace(/\s+/g, " ");
-
-  const partes = nome.split(" ");
-
-  // precisa ter pelo menos 2 palavras
-  if (partes.length < 2) {
-    return false;
-  }
-
-  // cada parte precisa ter pelo menos 2 letras
-  return partes.every(parte => parte.length >= 2);
+    // Nome ou pseudônimo pode ter uma única palavra.
+    return nome.trim().length >= 2;
 }
 
-// 🌹 Corrige e formata automaticamente
-function corrigirData() {
 
-  let valor = el.data.value.trim();
-
-  if (!valor) return;
-
-  // remove tudo que não for número
-  const numeros = valor.replace(/\D/g, "");
-
-  // tenta interpretar automaticamente
-  let dia = "";
-  let mes = "";
-  let ano = "";
-
-  // 7 dígitos → ex: 2102003
-  if (numeros.length === 7) {
-    dia = numeros.slice(0, 1);
-    mes = numeros.slice(1, 3);
-    ano = numeros.slice(3);
-  }
-
-  // 8 dígitos → ex: 02102003
-  else if (numeros.length === 8) {
-    dia = numeros.slice(0, 2);
-    mes = numeros.slice(2, 4);
-    ano = numeros.slice(4);
-  }
-
-  // digitado com separadores
-  else {
-
-    valor = valor.replace(/[-.]/g, "/");
-
-    const partes = valor.split("/");
-
-    if (partes.length !== 3) return;
-
-    [dia, mes, ano] = partes;
-  }
-
-  // adiciona zeros
-  dia = dia.padStart(2, "0");
-  mes = mes.padStart(2, "0");
-
-  // limita ano
-  ano = ano.slice(0, 4);
-
-  el.data.value = `${dia}/${mes}/${ano}`;
-}
-
-// 🆔 ID mais seguro
 function gerarID() {
-  if (window.crypto?.randomUUID) {
-    return `DR-${crypto.randomUUID().slice(0, 8)}`;
-  }
-  return `DR-${Math.floor(100000 + Math.random() * 900000)}`;
-}
 
-async function enviarFicha(conteudo) {
-
-  try {
-
-    const resposta = await fetch("https://armazenador-de-fichas-two.vercel.app/api/fichas", {
-      method: "POST",
-
-      headers: {
-        "Content-Type": "application/json",
-      },
-
-      body: JSON.stringify({
-        conteudo,
-        titulo: el.titulo.value
-      }),
-    });
-
-    const json = await resposta.json();
-
-    if (!resposta.ok) {
-      throw new Error(json.error || "Erro ao enviar");
+    if (window.crypto?.randomUUID) {
+        return `DR-${crypto.randomUUID().slice(0, 8)}`;
     }
 
-    console.log("Ficha enviada ✨", json);
-
-    return true;
-
-  } catch (erro) {
-
-    console.error(erro);
-
-    alert("Erro ao enviar ficha 🌫️");
-
-    return false;
-  }
+    return `DR-${Math.floor(
+        100000 + Math.random() * 900000
+    )}`;
 }
 
-// 📊 Progresso
-function atualizarBarra() {
-  let preenchidos = 0;
 
-  inputs.forEach(i => {
-    if (i.value.trim()) preenchidos++;
-  });
+function getFeedback() {
 
-  const porcentagem = (preenchidos / inputs.length) * 100;
-  el.progresso.style.width = `${porcentagem}%`;
+    const selecionado = document.querySelector(
+        'input[name="feedback"]:checked'
+    );
+
+    return selecionado ? selecionado.value : "-";
 }
 
-// 🧼 Limpeza de texto
-function limparEspacosFinais(texto) {
-  return texto
-    .split("\n")
-    .map(linha => linha.trimEnd())
-    .join("\n")
-    .trim();
+
+function getCapEspeciais() {
+
+    const selecionado = document.querySelector(
+        'input[name="possuiEspeciais"]:checked'
+    );
+
+    if (!selecionado) return "-";
+
+    if (selecionado.value === "Não") {
+        return "Não possui";
+    }
+
+    return el.capEspeciais.value.trim();
 }
 
-// 📐 Regras de negócio
-function calcularMedia(maior, menor) {
-  const max = parseInt(maior, 10);
-  const min = parseInt(menor, 10);
-
-  if (!Number.isInteger(max) || !Number.isInteger(min)) return "-";
-
-  return Math.round((max + min) / 2);
-}
 
 function getCheckboxes() {
-  const checks = document.querySelectorAll(".checkbox-group input[type='checkbox']:checked");
 
-  let valores = Array.from(checks).map(c => c.value);
+    const checks = document.querySelectorAll(
+        '.checkbox-group input[type="checkbox"]:checked'
+    );
 
-  if (valores.includes("Outro") && el.outroTexto.value.trim()) {
-    valores = valores.filter(v => v !== "Outro");
-    valores.push(el.outroTexto.value.trim());
-  }
+    const valores = Array.from(checks).map(check => {
 
-  return valores.length ? valores.join(", ") : "Não";
+        if (check.value === "Outro") {
+            return el.outroTexto.value.trim();
+        }
+
+        return check.value;
+    });
+
+    return valores.length
+        ? valores.join(", ")
+        : "Não informado";
 }
+
+
+/* =====================================================
+   11. VALIDAÇÃO DE DATA
+===================================================== */
 
 function validarData(dataStr) {
-  const regex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
 
-  if (!regex.test(dataStr)) return false;
+    const regex =
+        /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
 
-  const [dia, mes, ano] = dataStr.split("/").map(Number);
-  const data = new Date(ano, mes - 1, dia);
+    if (!regex.test(dataStr)) return false;
 
-  return (
-    data.getFullYear() === ano &&
-    data.getMonth() === mes - 1 &&
-    data.getDate() === dia
-  );
+    const [dia, mes, ano] = dataStr.split("/").map(Number);
+
+    const data = new Date(ano, mes - 1, dia);
+
+    return (
+        data.getFullYear() === ano &&
+        data.getMonth() === mes - 1 &&
+        data.getDate() === dia
+    );
 }
 
-// ✅ Validação isolada
-function validarFormulario() {
-  if (!el.nome.value.trim()) {
-    alert("Nome obrigatório 🌹");
-    return false;
-  }
 
-  if (!validarNomeCompleto(el.nome.value)) {
-    alert("Digite pelo menos nome e sobrenome 🌫️");
-    el.nome.focus();
-    return false;
-  }
-
-  if (el.data.value && !validarData(el.data.value)) {
-    alert("Data inválida 🌫️ Use o formato dd/mm/aaaa corretamente.");
-    return false;
-  }
-
-  // 🔥 NOVA VALIDAÇÃO (maior e menor obrigatórios e positivos)
-  if (!validarNumeroPositivo(el.maior.value) || !validarNumeroPositivo(el.menor.value)) {
-    alert("Informe valores válidos e positivos para quantidade de palavras 🌹");
-    return false;
-  }
-
-  const max = parseInt(el.maior.value, 10);
-  const min = parseInt(el.menor.value, 10);
-
-  if (min > max) {
-    alert("O menor capítulo não pode ser maior que o maior 🌫️");
-    return false;
-  }
-
-  return true;
-}
-
-// ===== Q/Cc =====
-
-// tabela até 10k (arredonda pra cima)
-function getTabelaQC(palavras) {
-  const p = Number(palavras);
-
-  if (p <= 100) return { cap: 10, com: 1 };
-  if (p <= 300) return { cap: 10, com: 1 };
-  if (p <= 400) return { cap: 8, com: 2 };
-  if (p <= 600) return { cap: 5, com: 4 };
-  if (p <= 800) return { cap: 4, com: 6 };
-  if (p <= 1000) return { cap: 3, com: 8 };
-  if (p <= 1500) return { cap: 2, com: 13 };
-  if (p <= 2000) return { cap: 2, com: 15 };
-  if (p <= 2500) return { cap: 1, com: 20 };
-  if (p <= 3000) return { cap: 1, com: 25 };
-  if (p <= 5000) return { cap: 1, com: 30 };
-  return { cap: 1, com: 35 }; // até 10k
-}
-
-// matemática base
-function mdc(a, b) {
-  return b === 0 ? a : mdc(b, a % b);
-}
-
-function mmc(a, b) {
-  return (a * b) / mdc(a, b);
-}
-
-// regra acima de 10k
-function calcularQCavancado(maior, menor) {
-  const max = Number(maior);
-  const min = Number(menor);
-  const media = Math.round((max + min) / 2);
-
-  const fator = 1000;
-
-  const maxN = Math.max(1, Math.floor(max / fator));
-  const minN = Math.max(1, Math.floor(min / fator));
-  const mediaN = Math.max(1, Math.floor(media / fator));
-
-  const TETO = 35;
-
-  // 🌹 tenta encontrar o MENOR divisor válido até o teto
-  for (let i = 1; i <= TETO; i++) {
-    if (
-      maxN % i === 0 &&
-      minN % i === 0 &&
-      mediaN % i === 0
-    ) {
-      return {
-        cap: 1,
-        com: i
-      };
-    }
-  }
-
-  // 🌑 fallback inteligente → pega os dois primeiros dígitos do menor
-  const menorStr = String(min);
-  const fallback = Number(menorStr.slice(0, 2));
-
-  return {
-    cap: 1,
-    com: Math.min(fallback, TETO)
-  };
-}
-
-// função principal Q/Cc
-function calcularQC(maior, menor) {
-  const max = Number(maior);
-  const min = Number(menor);
-
-  if (!max || !min) return "-";
-
-  // até 10k → usa tabela (pela média)
-  const media = Math.round((max + min) / 2);
-
-  if (media <= 10000) {
-    return getTabelaQC(media);
-  }
-
-  // acima de 10k → regra avançada
-  return calcularQCavancado(max, min);
-}
-
-// formatação final
-function formatarQC(qc) {
-  if (qc === "-") return "-";
-  return `${qc.cap}C.${qc.com}c.`;
-}
+/* =====================================================
+   12. VALIDAÇÃO NUMÉRICA
+===================================================== */
 
 function validarNumeroPositivo(valor) {
-  const n = Number(valor);
-  return Number.isFinite(n) && n > 0;
+
+    const numero = Number(valor);
+
+    return (
+        Number.isSafeInteger(numero) &&
+        numero > 0
+    );
 }
 
-// 🧾 Montagem da mensagem (STRING PRESERVADA)
+
+function validarOrdemPalavras() {
+
+    const maior = Number(el.maior.value);
+    const menor = Number(el.menor.value);
+
+    if (
+        el.maior.value &&
+        el.menor.value &&
+        maior > 0 &&
+        menor > 0 &&
+        menor > maior
+    ) {
+
+        el.menor.setCustomValidity(
+            "O menor capítulo não pode superar o maior."
+        );
+
+    } else {
+
+        el.menor.setCustomValidity("");
+    }
+}
+
+
+/* =====================================================
+   13. VALIDAÇÃO GERAL
+===================================================== */
+
+function validarFormulario() {
+
+    const camposObrigatorios = [
+        el.nome,
+        el.data,
+        el.titulo,
+        el.user,
+        el.genero,
+        el.maior,
+        el.menor,
+        el.link
+    ];
+
+    for (const campo of camposObrigatorios) {
+
+        if (!campo.value.trim()) {
+
+            campo.focus();
+
+            alert("Preencha todos os campos obrigatórios 🌹");
+
+            return false;
+        }
+    }
+
+    if (!validarNomeCompleto(el.nome.value)) {
+
+        el.nome.focus();
+
+        alert("Informe um nome ou pseudônimo com pelo menos 2 caracteres.");
+
+        return false;
+    }
+
+    if (!validarData(el.data.value)) {
+
+        el.data.focus();
+
+        alert("Data inválida 🌫️ Utilize dd/mm/aaaa.");
+
+        return false;
+    }
+
+    if (!getFeedback()) {
+
+        document.querySelector(
+            'input[name="feedback"]'
+        ).focus();
+
+        alert("Selecione sua preferência de feedback.");
+
+        return false;
+    }
+
+    const conteudoSelecionado = document.querySelector(
+        '.checkbox-group input[type="checkbox"]:checked'
+    );
+
+    if (!conteudoSelecionado) {
+
+        alert("Selecione uma opção de conteúdo sensível, incluindo Nenhum.");
+
+        return false;
+    }
+
+    if (
+        el.outroCheck.checked &&
+        !el.outroTexto.value.trim()
+    ) {
+
+        el.outroTexto.focus();
+
+        alert("Descreva o outro conteúdo sensível.");
+
+        return false;
+    }
+
+    const especiais = document.querySelector(
+        'input[name="possuiEspeciais"]:checked'
+    );
+
+    if (!especiais) {
+
+        alert("Informe se sua obra possui capítulos especiais.");
+
+        return false;
+    }
+
+    if (
+        especiais.value === "Sim" &&
+        !el.capEspeciais.value.trim()
+    ) {
+
+        el.capEspeciais.focus();
+
+        alert("Informe quais são os capítulos especiais.");
+
+        return false;
+    }
+
+    if (!validarNumeroPositivo(el.maior.value) ||
+        !validarNumeroPositivo(el.menor.value)) {
+
+        el.maior.focus();
+
+        alert("Informe quantidades de palavras inteiras e positivas.");
+
+        return false;
+    }
+
+    const maior = Number(el.maior.value);
+    const menor = Number(el.menor.value);
+
+    if (menor > maior) {
+
+        el.menor.focus();
+
+        alert("O menor capítulo não pode ser maior que o maior.");
+
+        return false;
+    }
+
+    // Verifica URL.
+    try {
+
+        const url = new URL(el.link.value);
+
+        if (!["http:", "https:"].includes(url.protocol)) {
+            throw new Error("Protocolo inválido");
+        }
+
+    } catch {
+
+        el.link.focus();
+
+        alert("Informe um link válido para sua obra.");
+
+        return false;
+    }
+
+    return true;
+}
+
+
+/* =====================================================
+   14. CÁLCULO DE MÉDIA
+===================================================== */
+
+function calcularMedia(maior, menor) {
+
+    const max = Number(maior);
+    const min = Number(menor);
+
+    if (
+        !Number.isSafeInteger(max) ||
+        !Number.isSafeInteger(min)
+    ) {
+        return "-";
+    }
+
+    return Math.round((max + min) / 2);
+}
+
+
+/* =====================================================
+   15. SISTEMA Q/CC
+   REGRAS ORIGINAIS PRESERVADAS
+===================================================== */
+
+// Tabela até 10 mil palavras.
+
+function getTabelaQC(palavras) {
+
+    const p = Number(palavras);
+
+    if (p <= 100) return { cap: 10, com: 1 };
+    if (p <= 300) return { cap: 10, com: 1 };
+    if (p <= 400) return { cap: 8, com: 2 };
+    if (p <= 600) return { cap: 5, com: 4 };
+    if (p <= 800) return { cap: 4, com: 6 };
+    if (p <= 1000) return { cap: 3, com: 8 };
+    if (p <= 1500) return { cap: 2, com: 13 };
+    if (p <= 2000) return { cap: 2, com: 15 };
+    if (p <= 2500) return { cap: 1, com: 20 };
+    if (p <= 3000) return { cap: 1, com: 25 };
+    if (p <= 5000) return { cap: 1, com: 30 };
+
+    return { cap: 1, com: 35 };
+}
+
+
+// MDC.
+
+function mdc(a, b) {
+
+    return b === 0
+        ? a
+        : mdc(b, a % b);
+}
+
+
+// MMC.
+
+function mmc(a, b) {
+
+    return (a * b) / mdc(a, b);
+}
+
+
+// Regra avançada acima de 10 mil.
+
+function calcularQCavancado(maior, menor) {
+
+    const max = Number(maior);
+    const min = Number(menor);
+
+    const media = Math.round((max + min) / 2);
+
+    const fator = 1000;
+
+    const maxN = Math.max(1, Math.floor(max / fator));
+    const minN = Math.max(1, Math.floor(min / fator));
+    const mediaN = Math.max(1, Math.floor(media / fator));
+
+    const TETO = 35;
+
+    for (let i = 1; i <= TETO; i++) {
+
+        if (
+            maxN % i === 0 &&
+            minN % i === 0 &&
+            mediaN % i === 0
+        ) {
+
+            return {
+                cap: 1,
+                com: i
+            };
+        }
+    }
+
+    const menorStr = String(min);
+    const fallback = Number(menorStr.slice(0, 2));
+
+    return {
+        cap: 1,
+        com: Math.min(fallback, TETO)
+    };
+}
+
+
+// Função principal.
+
+function calcularQC(maior, menor) {
+
+    const max = Number(maior);
+    const min = Number(menor);
+
+    if (!max || !min) return "-";
+
+    const media = Math.round((max + min) / 2);
+
+    if (media <= 10000) {
+        return getTabelaQC(media);
+    }
+
+    return calcularQCavancado(max, min);
+}
+
+
+// Formatação.
+
+function formatarQC(qc) {
+
+    if (qc === "-") return "-";
+
+    return `${qc.cap}C.${qc.com}c.`;
+}
+
+
+/* =====================================================
+   16. MONTAGEM DA MENSAGEM
+   FORMATO ORIGINAL PRESERVADO
+===================================================== */
+
 function montarMensagem() {
-  const mediaCalculada = calcularMedia(el.maior.value, el.menor.value);
 
-  const palavrasFormatadas =
-    `Maior capítulo: ${el.maior.value || "-"} / ` +
-    `Menor capítulo: ${el.menor.value || "-"} / ` +
-    `Média padrão: ${mediaCalculada}`;
+    const mediaCalculada = calcularMedia(
+        el.maior.value,
+        el.menor.value
+    );
 
-  return `*🌫️🌹${el.nome.value}🌹🌫️*
+    const palavrasFormatadas =
+        `Maior capítulo: ${el.maior.value} / ` +
+        `Menor capítulo: ${el.menor.value} / ` +
+        `Média padrão: ${mediaCalculada}`;
+
+    return `*🌫️🌹${el.nome.value.trim()}🌹🌫️*
 *🌹 Data de Nascimento:* ${el.data.value}
-*🌫️ Título do Livro:* ${el.titulo.value}
+*🌫️ Título do Livro:* ${el.titulo.value.trim()}
 *🌹 Usuário no Wattpad :* ${el.user.value}
-*🌫️ Gênero Literário:* ${el.genero.value}
+*🌫️ Gênero Literário:* ${el.genero.value.trim()}
 *🌹 Contém conteúdo +18?  (Se sim, especifique: tortura, suicídio, abuso, drogas, etc.):* ${getCheckboxes()}.
-*🌫️ Você possui gatilhos ou desconfortos ao ler conteúdo +18? (Se sim, quais?):* ${el.gatilhos.value}.
+*🌫️ Você possui gatilhos ou desconfortos ao ler conteúdo +18? (Se sim, quais?):* ${el.gatilhos.value.trim() || "Não informado"}.
 *🌹 Deseja participar de feedbacks? (Feedbacks são mútuos; não é possível apenas receber):* ${getFeedback()}.
-*🌫️ Possui capítulos especiais? (Capítulos curtos com menos de 300 palavras):* ${el.capEspeciais.value}.
+*🌫️ Possui capítulos especiais? (Capítulos curtos com menos de 300 palavras):* ${getCapEspeciais()}.
 *🌹 Quantidade de palavras (${palavrasFormatadas}):*
-*🌫️ Link da Obra:* ${el.link.value}
+*🌫️ Link da Obra:* ${el.link.value.trim()}
 ◃────────────────▹
 *🌫️ NÃO PREENCHA 🌫️*
 *Bônus Q/L:* 
@@ -394,120 +852,435 @@ function montarMensagem() {
 *S/a:*`;
 }
 
-// 🎯 AÇÃO PRINCIPAL
+
+/* =====================================================
+   17. ENVIO PARA API
+===================================================== */
+
+async function enviarFicha(conteudo) {
+
+    try {
+
+        const resposta = await fetch(CONFIG.apiUrl, {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+                conteudo,
+                titulo: el.titulo.value.trim()
+            })
+
+        });
+
+        let json = {};
+
+        try {
+            json = await resposta.json();
+        } catch {
+            json = {};
+        }
+
+        if (!resposta.ok) {
+
+            throw new Error(
+                json.error || `Erro HTTP ${resposta.status}`
+            );
+        }
+
+        console.log("Ficha enviada ao Dark Roses ✨", json);
+
+        return {
+            sucesso: true,
+            dados: json
+        };
+
+    } catch (erro) {
+
+        console.error("Erro ao enviar ficha:", erro);
+
+        return {
+            sucesso: false,
+            erro
+        };
+    }
+}
+
+
+/* =====================================================
+   18. CÓPIA DA FICHA
+===================================================== */
+
+async function copiarTexto(texto) {
+
+    try {
+
+        if (navigator.clipboard && window.isSecureContext) {
+
+            await navigator.clipboard.writeText(texto);
+
+            return true;
+        }
+
+        // Alternativa para ambientes sem Clipboard API.
+
+        const textarea = document.createElement("textarea");
+
+        textarea.value = texto;
+
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+
+        document.body.appendChild(textarea);
+
+        textarea.select();
+
+        const sucesso = document.execCommand("copy");
+
+        textarea.remove();
+
+        return sucesso;
+
+    } catch (erro) {
+
+        console.error("Erro ao copiar:", erro);
+
+        return false;
+    }
+}
+
+
+/* =====================================================
+   19. AÇÃO PRINCIPAL
+===================================================== */
+
 async function gerar() {
 
-  if (!validarFormulario()) return;
+    if (estado.gerando) return;
 
-  const qc = calcularQC(el.maior.value, el.menor.value);
-  const qcFormatado = formatarQC(qc);
+    validarOrdemPalavras();
 
-  let msg = montarMensagem();
+    if (!validarFormulario()) return;
 
-  msg = msg.replace(
-    "*Q/Cc:*",
-    `*Q/Cc:* ${qcFormatado}`
-  );
+    estado.gerando = true;
 
- const mensagemFinal = limparEspacosFinais(msg);
+    const botao = el.form.querySelector(
+        ".acoes button"
+    );
 
-  el.resultado.innerText = mensagemFinal;
+    const textoOriginal = botao.textContent;
 
-  // 📋 copia automática
-  try {
-    await navigator.clipboard.writeText(mensagemFinal);
-    alert("Ficha copiada 🌹");
-  } catch (erro) {
-    alert("Erro ao copiar:", erro);
-  }
+    botao.disabled = true;
+    botao.textContent = "Gerando ficha...";
 
-  gerarCard();
+    try {
 
-  // ✨ ENVIA PRO SISTEMA
-  const enviado = await enviarFicha(msg);
+        // Q/Cc.
+        const qc = calcularQC(
+            el.maior.value,
+            el.menor.value
+        );
 
-  if (enviado) {
-    alert("Ficha enviada para Dark Roses 🌹");
-  }
+        const qcFormatado = formatarQC(qc);
+
+        // Mensagem.
+        let msg = montarMensagem();
+
+        msg = msg.replace(
+            "*Q/Cc:*",
+            `*Q/Cc:* ${qcFormatado}`
+        );
+
+        const mensagemFinal = limparEspacosFinais(msg);
+
+        // Resultado.
+        el.resultado.textContent = mensagemFinal;
+        el.resultado.hidden = false;
+
+        // Cartão.
+        gerarCard();
+
+        // Cópia.
+        const copiado = await copiarTexto(mensagemFinal);
+
+        if (copiado) {
+            console.log("Ficha copiada 🌹");
+        } else {
+            console.warn("Não foi possível copiar automaticamente.");
+        }
+
+        // Envio para o armazenamento.
+        const envio = await enviarFicha(mensagemFinal);
+
+        // Retorno ao usuário.
+        if (envio.sucesso) {
+
+            alert(
+                copiado
+                    ? "Ficha copiada e enviada para Dark Roses! 🌹"
+                    : "Ficha enviada para Dark Roses! 🌹"
+            );
+
+        } else {
+
+            alert(
+                copiado
+                    ? "Ficha copiada, mas não foi possível enviá-la ao servidor. Você ainda pode utilizar a ficha normalmente."
+                    : "A ficha foi gerada, mas houve problemas na cópia e no envio."
+            );
+        }
+
+    } catch (erro) {
+
+        console.error("Erro ao gerar ficha:", erro);
+
+        alert("Ocorreu um erro ao gerar sua ficha 🌫️");
+
+    } finally {
+
+        estado.gerando = false;
+
+        botao.disabled = false;
+        botao.textContent = textoOriginal;
+    }
 }
 
-// 🖼️ Exportar card
-function baixarCard() {
-  const card = document.querySelector(".card");
 
-  if (!card) {
-    alert("Gere o cartão primeiro 🌹");
-    return;
-  }
+/* =====================================================
+   20. CRIAÇÃO SEGURA DE ELEMENTOS
+===================================================== */
 
-  if (typeof html2canvas === "undefined") {
-    alert("Erro ao gerar imagem 🌫️");
-    return;
-  }
+function criarElemento(tag, classe, texto) {
 
-  card.classList.add("exportando");
+    const elemento = document.createElement(tag);
 
-  html2canvas(card, {
-    scale: 2,
-    backgroundColor: null
-  }).then(canvas => {
-    const link = document.createElement("a");
-    link.download = "dark-roses-card.png";
-    link.href = canvas.toDataURL();
-    link.click();
-  }).finally(() => {
-    card.classList.remove("exportando");
-  });
+    if (classe) {
+        elemento.className = classe;
+    }
+
+    if (texto !== undefined) {
+        elemento.textContent = texto;
+    }
+
+    return elemento;
 }
 
-// 🃏 Card
+
+/* =====================================================
+   21. GERAÇÃO DO CARTÃO
+===================================================== */
+
 function gerarCard() {
-  const idMembro = gerarID();
 
-  el.cardContainer.innerHTML = `
-    <div class="card">
-      
-      <div class="selo">🌹 Dark Roses</div>
+    const idMembro = estado.ultimoID || gerarID();
 
-      <h3>${el.nome.value}</h3>
-      <div class="sub">MEMBRO OFICIAL</div>
+    estado.ultimoID = idMembro;
 
-      <div class="info">
-        <span>📖 Livro</span>
-        <strong>${el.titulo.value || "-"}</strong>
-      </div>
+    // Container.
+    const card = criarElemento("div", "card");
 
-      <div class="info">
-        <span>🎭 Gênero</span>
-        <strong>${el.genero.value || "-"}</strong>
-      </div>
+    // Selo.
+    const selo = criarElemento(
+        "div",
+        "selo",
+        "🌹 Dark Roses"
+    );
 
-      <div class="info">
-        <span>👤 Wattpad</span>
-        <strong>${el.user.value || "-"}</strong>
-      </div>
+    card.appendChild(selo);
 
-      <div class="info">
-        <span>📅 Nascimento</span>
-        <strong>${el.data.value || "-"}</strong>
-      </div>
+    // Nome.
+    const nome = criarElemento(
+        "h3",
+        "",
+        el.nome.value.trim()
+    );
 
-      <div class="info">
-        <span>💬 Feedbacks</span>
-        <strong>${getFeedback() || "-"}</strong>
-      </div>
+    card.appendChild(nome);
 
-      <div class="id">ID: ${idMembro}</div>
+    // Subtítulo.
+    const sub = criarElemento(
+        "div",
+        "sub",
+        "MEMBRO OFICIAL"
+    );
 
-      <div class="footer">
-        Dark Roses Society • Escritores unidos pela arte
-      </div>
+    card.appendChild(sub);
 
-    </div>
-  `;
+    // Informações.
+    const informacoes = [
+
+        ["📖 Livro", el.titulo.value.trim()],
+
+        ["🎭 Gênero", el.genero.value.trim()],
+
+        ["👤 Wattpad", el.user.value],
+
+        ["📅 Nascimento", el.data.value],
+
+        ["💬 Feedbacks", getFeedback()]
+
+    ];
+
+    informacoes.forEach(([rotulo, valor]) => {
+
+        const linha = criarElemento("div", "info");
+
+        const label = criarElemento(
+            "span",
+            "",
+            rotulo
+        );
+
+        const conteudo = criarElemento(
+            "strong",
+            "",
+            valor || "-"
+        );
+
+        linha.append(label, conteudo);
+
+        card.appendChild(linha);
+    });
+
+    // Identificador.
+    const id = criarElemento(
+        "div",
+        "id",
+        `ID: ${idMembro}`
+    );
+
+    card.appendChild(id);
+
+    // Rodapé.
+    const footer = criarElemento(
+        "div",
+        "footer",
+        "Dark Roses Society • Escritores unidos pela arte"
+    );
+
+    card.appendChild(footer);
+
+    // Atualiza o container.
+    el.cardContainer.replaceChildren(card);
+
+    el.cardContainer.hidden = false;
+
+    el.baixarCardBtn.hidden = false;
+
+    return card;
 }
 
-// 🎨 Tema
+
+/* =====================================================
+   22. EXPORTAÇÃO DO CARTÃO
+===================================================== */
+
+async function baixarCard() {
+
+    const card = el.cardContainer.querySelector(".card");
+
+    if (!card) {
+
+        alert("Gere o cartão primeiro 🌹");
+
+        return;
+    }
+
+    if (typeof html2canvas === "undefined") {
+
+        alert("Biblioteca de captura indisponível 🌫️");
+
+        return;
+    }
+
+    const botao = el.baixarCardBtn;
+
+    botao.disabled = true;
+
+    const textoOriginal = botao.textContent;
+
+    botao.textContent = "Preparando imagem...";
+
+    card.classList.add("exportando");
+
+    try {
+
+        const canvas = await html2canvas(card, {
+
+            scale: CONFIG.exportScale,
+
+            backgroundColor: null,
+
+            useCORS: true,
+
+            logging: false
+        });
+
+        const imagem = await new Promise((resolve, reject) => {
+
+            canvas.toBlob(blob => {
+
+                if (blob) {
+                    resolve(blob);
+                } else {
+                    reject(new Error("Falha ao criar imagem."));
+                }
+
+            }, "image/png");
+        });
+
+        const url = URL.createObjectURL(imagem);
+
+        const link = document.createElement("a");
+
+        link.href = url;
+
+        link.download = CONFIG.cardFileName;
+
+        document.body.appendChild(link);
+
+        link.click();
+
+        link.remove();
+
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+    } catch (erro) {
+
+        console.error("Erro ao exportar cartão:", erro);
+
+        alert("Não foi possível exportar o cartão 🌫️");
+
+    } finally {
+
+        card.classList.remove("exportando");
+
+        botao.disabled = false;
+
+        botao.textContent = textoOriginal;
+    }
+}
+
+
+/* =====================================================
+   23. SISTEMA DE TEMAS
+===================================================== */
+
 function setTema(tema) {
-  document.body.className = tema;
+
+    if (!CONFIG.temas.includes(tema)) {
+        console.warn("Tema não reconhecido:", tema);
+        return;
+    }
+
+    CONFIG.temas.forEach(nome => {
+        document.body.classList.remove(nome);
+    });
+
+    document.body.classList.add(tema);
+
+    console.log(`Tema alterado: ${tema} 🌹`);
 }
